@@ -1,2 +1,16 @@
-* { box-sizing: border-box; font-family: "Open Sans", sans-serif; }
-body { font-size: 18px; }
+* { 
+  box-sizing: border-box; 
+  font-family: "Open Sans", sans-serif; 
+}
+body { 
+  font-size: 18px; 
+}
+.ed-dropzone {
+  min-height: 200px;
+  border: 5px dotted #157066;
+  background-color: #FFFFFF;
+  min-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+}

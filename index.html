@@ -1,11 +1,72 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Elite Dangerous: Journal Reader</title>
-<link rel="stylesheet" type="text/css" href="edj.main.css" />
+  <title>Elite Dangerous: Journal Reader</title>
+  <link rel="stylesheet" type="text/css" href="edj.main.css" />
 </head>
+
 <body>
-Empty for now
-<script type="text/javascript" src="edj.filereader.js"></script>
+  Empty for now
+  <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir>
+  <script type="text/javascript" src="edj.filereader.js"></script>
+  <script type="text/javascript">
+
+  var player = {
+    cmdr: null,
+    pos: null
+  };
+
+  var selDir;
+  var lastFile;
+  var lastFileSize = 0;
+  var lastByte = 0;
+  var byteSize = 1024 * 1024;
+  var lastLine = 0;
+function checkFiles(evt) {
+  
+  selDir = evt.target.files;
+  console.log(selDir);
+  setTimeout(monitorChanges, 1000);
+}
+
+function monitorChanges() {
+  var _files = document.querySelector('#logDirectory').files;
+  var _fileCount = _files.length;
+  
+  var i = 0;
+  while(i < _fileCount) {
+    if(undefined == lastFile || _files[i].lastModified > lastFile.lastModified) {
+      lastFile = _files[i];
+    }
+    
+    i++;
+  }
+
+  lastFileSize = lastFile.size;
+
+  var fr = new FileReader();
+  fr.onload = (function(file) {
+   
+    var lines = this.result.split('\n');
+    var l = lastLine;
+    while(l < lines.length) {
+      console.log(lines[l]);
+      l++;
+    }
+    lastLine = l;
+    
+  });
+
+  fr.readAsText(lastFile, 'UTF-8');
+
+  setTimeout(monitorChanges, 1000);
+}
+
+(function() {
+  document.getElementById('logDirectory').addEventListener('change', checkFiles, false);
+})();
+  </script>
 </body>
+
 </html>
