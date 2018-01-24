@@ -35,7 +35,7 @@
     function copyPath(selector) {
       var t = document.querySelector(selector);
       t.contenteditable = true;
-      if(document.body.createTextRange) {
+      if (document.body.createTextRange) {
         var r = document.body.createTextRange();
         r.moveToElementText(t);
         r.select();
@@ -103,15 +103,27 @@
       setTimeout(monitorChanges, 1000);
     }
 
+    function isJson(line) {
+      try {
+        JSON.parse(line);
+      }
+      catch (e) {
+        return false;
+      }
+      return true;
+    }
+
     function parseLogLine(line) {
-      var logItem = JSON.parse(line);
-      switch (logItem.event) {
-        case 'LoadGame':
-          player.cmdr = logItem.Commander;
-          break;
-        case 'Location':
-          player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
-          break;
+      if (isJson(line)) {
+        var logItem = JSON.parse(line);
+        switch (logItem.event) {
+          case 'LoadGame':
+            player.cmdr = logItem.Commander;
+            break;
+          case 'Location':
+            player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
+            break;
+        }
       }
     }
 
