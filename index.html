@@ -90,6 +90,10 @@
         var lines = this.result.split('\n');
         var l = lastLine;
         while (l < lines.length) {
+          if(lines[l] == '') {
+            l--;
+            break;
+          }
           parseLogLine(lines[l]);
           l++;
         }
