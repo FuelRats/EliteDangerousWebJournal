@@ -65,10 +65,8 @@
     var byteSize = 1024 * 1024;
     var lastLine = 0;
     function checkFiles(evt) {
-
       selDir = evt.target.files;
-      console.log(selDir);
-      setTimeout(monitorChanges, 250);
+      monitorChanges();
     }
 
     function monitorChanges() {
@@ -104,12 +102,8 @@
     }
 
     function isJson(line) {
-      try {
-        JSON.parse(line);
-      }
-      catch (e) {
-        return false;
-      }
+      try { JSON.parse(line); }
+      catch (e) { return false; }
       return true;
     }
 
@@ -127,7 +121,8 @@
             player.pos = logItem.StarSystem;
             break;
           case 'Docked':
-          player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
+            player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
+            break;
         }
       }
     }
