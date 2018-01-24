@@ -4,13 +4,49 @@
 }
 body { 
   font-size: 18px; 
+  background-color: rgb(29, 29, 29);
+  color: rgb(199, 199, 199);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 .ed-dropzone {
   min-height: 200px;
   border: 5px dotted #157066;
-  background-color: #FFFFFF;
+  background-color: rgb(83, 56, 56);
   min-width: 300px;
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
+}
+
+pre.code {
+  display: inline;
+  background-color: rgb(223, 223, 223);
+  color: rgb(22, 22, 22);
+  border-radius: 10px;
+  padding: 10px;
+  font-family: Courier New, Courier, monospace;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.directorySelection input[type="file"] {
+  display: none;
+}
+
+.directorySelection {
+  display: inline-block;
+  margin-top: 10px;
+  cursor: pointer;
+  background-color: rgb(189, 106, 52);
+  color: rgb(199, 199, 199);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.player-info {
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 10px;
+  display: inline-block;
+  background-color: rgb(119, 47, 59);
+  min-width: 400px;
 }

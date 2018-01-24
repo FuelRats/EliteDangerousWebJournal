@@ -7,65 +7,97 @@
 </head>
 
 <body>
-  Empty for now
-  <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir>
+  <h1>Elite Dangerous: Web Journal Reader</h1>
+  <h2>Welcome Commander</h2>
+  <p>Select your journal directory:</p>
+  <p>Windows:
+    <pre class="code">%userprofile%/Saved Games/Frontier Developments/Elite Dangerous/</pre>
+  </p>
+  <p>macOS:
+    <pre class="code">/Users/&lt;username&gt;/Library/Application Support/Frontier Developments/Elite Dangerous/</pre>
+  </p>
+  <label class="directorySelection">
+    <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir />
+    Select your Journal directory
+  </label>
+  <br />
+  <div class="player-info">
+    <span id="cmdrname">CMDR &lt;Load the journal&gt;</span>
+    <span id="location">&lt;Load the journal&gt;</span>
+  </div>
   <script type="text/javascript" src="edj.filereader.js"></script>
   <script type="text/javascript">
 
-  var player = {
-    cmdr: null,
-    pos: null
-  };
+    var player = {
+      cmdr: null,
+      pos: null
+    };
 
-  var selDir;
-  var lastFile;
-  var lastFileSize = 0;
-  var lastByte = 0;
-  var byteSize = 1024 * 1024;
-  var lastLine = 0;
-function checkFiles(evt) {
-  
-  selDir = evt.target.files;
-  console.log(selDir);
-  setTimeout(monitorChanges, 1000);
-}
+    var selDir;
+    var lastFile;
+    var lastFileSize = 0;
+    var lastByte = 0;
+    var byteSize = 1024 * 1024;
+    var lastLine = 0;
+    function checkFiles(evt) {
 
-function monitorChanges() {
-  var _files = document.querySelector('#logDirectory').files;
-  var _fileCount = _files.length;
-  
-  var i = 0;
-  while(i < _fileCount) {
-    if(undefined == lastFile || _files[i].lastModified > lastFile.lastModified) {
-      lastFile = _files[i];
+      selDir = evt.target.files;
+      console.log(selDir);
+      setTimeout(monitorChanges, 250);
     }
-    
-    i++;
-  }
 
-  lastFileSize = lastFile.size;
+    function monitorChanges() {
+      var _files = document.querySelector('#logDirectory').files;
+      var _fileCount = _files.length;
 
-  var fr = new FileReader();
-  fr.onload = (function(file) {
-   
-    var lines = this.result.split('\n');
-    var l = lastLine;
-    while(l < lines.length) {
-      console.log(lines[l]);
-      l++;
+      var i = 0;
+      while (i < _fileCount) {
+        if (undefined == lastFile || _files[i].lastModified > lastFile.lastModified) {
+          lastFile = _files[i];
+        }
+
+        i++;
+      }
+
+      lastFileSize = lastFile.size;
+
+      var fr = new FileReader();
+      fr.onload = (function (file) {
+
+        var lines = this.result.split('\n');
+        var l = lastLine;
+        while (l < lines.length) {
+          parseLogLine(lines[l]);
+          l++;
+        }
+        lastLine = l;
+        updateGui();
+      });
+
+      fr.readAsText(lastFile, 'UTF-8');
+      setTimeout(monitorChanges, 1000);
     }
-    lastLine = l;
-    
-  });
 
-  fr.readAsText(lastFile, 'UTF-8');
+    function parseLogLine(line) {
+      var logItem = JSON.parse(line);
+      switch(logItem.event) {
+        case 'LoadGame':
+          player.cmdr = logItem.Commander;
+          break;
+        case 'Location':
+          player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
+          break;
+      }
+    }
 
-  setTimeout(monitorChanges, 1000);
-}
+    function updateGui() {
+      document.getElementById('cmdrname').innerText = 'CMDR ' + player.cmdr;
+      document.getElementById('location').innerText = 'at ' + player.pos;
+    }
 
-(function() {
-  document.getElementById('logDirectory').addEventListener('change', checkFiles, false);
-})();
+    (function () {
+      document.getElementById('logDirectory').addEventListener('change', checkFiles, false);
+    })();
   </script>
 </body>
 
