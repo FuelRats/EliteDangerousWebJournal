@@ -11,22 +11,47 @@
   <h2>Welcome Commander</h2>
   <p>Select your journal directory:</p>
   <p>Windows:
-    <pre class="code">%userprofile%/Saved Games/Frontier Developments/Elite Dangerous/</pre>
+    <span>
+      <pre class="code" id="winpath">%userprofile%/Saved Games/Frontier Developments/Elite Dangerous/</pre>
+      <a href="#" onclick="copyPath('#winpath');">Copy</a>
+    </span>
   </p>
   <p>macOS:
-    <pre class="code">/Users/&lt;username&gt;/Library/Application Support/Frontier Developments/Elite Dangerous/</pre>
+    <span>
+      <pre class="code" id="macpath">/Users/&lt;username&gt;/Library/Application Support/Frontier Developments/Elite Dangerous/</pre>
+      <a href="#" onclick="copyPath('#macpath');">Copy</a>
+    </span>
   </p>
   <label class="directorySelection">
-    <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir />
-    Select your Journal directory
+    <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir /> Select your Journal directory
   </label>
   <br />
   <div class="player-info">
     <span id="cmdrname">CMDR &lt;Load the journal&gt;</span>
     <span id="location">&lt;Load the journal&gt;</span>
   </div>
-  <script type="text/javascript" src="edj.filereader.js"></script>
   <script type="text/javascript">
+
+    function copyPath(selector) {
+      var t = document.querySelector(selector);
+      t.contenteditable = true;
+      if(document.body.createTextRange) {
+        var r = document.body.createTextRange();
+        r.moveToElementText(t);
+        r.select();
+        r.execCommand("Copy");
+        r.moveToElementText(null);
+        r.select();
+      } else if (window.getSelection && document.createRange) {
+        var r = document.createRange();
+        r.selectNodeContents(t);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        document.execCommand('copy');
+      }
+      t.contenteditable = false;
+    }
 
     var player = {
       cmdr: null,
@@ -80,7 +105,7 @@
 
     function parseLogLine(line) {
       var logItem = JSON.parse(line);
-      switch(logItem.event) {
+      switch (logItem.event) {
         case 'LoadGame':
           player.cmdr = logItem.Commander;
           break;

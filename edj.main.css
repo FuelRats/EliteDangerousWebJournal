@@ -18,6 +18,8 @@ body {
   max-width: 800px;
 }
 
+a { color: pink; text-decoration: none;}
+
 pre.code {
   display: inline;
   background-color: rgb(223, 223, 223);
