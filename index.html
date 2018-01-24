@@ -123,6 +123,11 @@
           case 'Location':
             player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
             break;
+          case 'FSDJump':
+            player.pos = logItem.StarSystem;
+            break;
+          case 'Docked':
+          player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
         }
       }
     }
