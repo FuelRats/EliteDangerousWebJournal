@@ -10,13 +10,43 @@ var edu_logparser = {
           edjdata.player.cmdr = logItem;
           break;
         case 'Location':
-          edjdata.player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
+          edjdata.player.pos.starsystem = logItem.StarSystem;
+          edjdata.player.pos.docked = logItem.Docked;
+          edjdata.player.pos.starposition = logItem.StarPos;
+          edjdata.player.pos.body = logItem.Body;
+          edjdata.player.pos.bodytype = logItem.BodyType;
+          break;
+        case 'StartJump':
+          edjdata.player.pos.starsystem = logItem.StarSystem;
+          edjdata.player.pos.docked = false;
+          edjdata.player.pos.body = null;
+          edjdata.player.pos.starposition = null
+          edjdata.player.pos.bodytype = null;
+          edjdata.player.pos.scoopable = ed_scoopables.findIndex(function (item) { return item == logItem.StarClass; }) !== -1;
           break;
         case 'FSDJump':
-          edjdata.player.pos = logItem.StarSystem;
+          edjdata.player.pos.starsystem = logItem.StarSystem;
+          edjdata.player.pos.docked = false;
+          edjdata.player.pos.starposition = logItem.StarPos;
+          edjdata.player.pos.body = null;
+          edjdata.player.pos.bodytype = null;
+          break;
+        case 'SupercruiseExit':
+          edjdata.player.pos.docked = false;
+          edjdata.player.pos.body = null;
+          edjdata.player.pos.bodytype = null;
+          break;
+        case 'Undocked':
+          edjdata.player.pos.docked = false;
+          edjdata.player.pos.body = null;
+          edjdata.player.pos.bodytype = null;
           break;
         case 'Docked':
-          edjdata.player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
+          edjdata.player.pos.starsystem = logItem.StarSystem;
+          edjdata.player.pos.docked = true;
+          edjdata.player.pos.starposition = logItem.StarPos;
+          edjdata.player.pos.body = logItem.StationName;
+          edjdata.player.pos.bodytype = logItem.StationType;
           break;
         case 'Rank':
           edjdata.player.rank.cqc.rank = logItem.CQC;

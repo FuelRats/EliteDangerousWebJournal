@@ -45,11 +45,13 @@ var edj = {
       var lines = this.result.split('\n');
       var l = edj.lastLine;
       while (l < lines.length) {
-        if (lines[l] == '') {
+        /*if (lines[l] == '') {
           l--;
           break;
+        }*/
+        if (edj.lastLine !== lines[l]) {
+          edu_logparser.parseLogLine(lines[l]);
         }
-        edu_logparser.parseLogLine(lines[l]);
         l++;
       }
       edj.lastLine = l;

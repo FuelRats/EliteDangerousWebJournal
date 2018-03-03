@@ -27,6 +27,16 @@ var edjdata = {
         progress: 0
       }
     },
-    pos: null
+    pos: {
+      starsystem: null,
+      docked: true,
+      body: null,
+      bodytype: null,
+      starposition: null,
+      scoopable: null
+    }
+  },
+  current: {
+
   }
 };

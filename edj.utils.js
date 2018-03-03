@@ -3,3 +3,7 @@ function isJson(line) {
   catch (e) { return false; }
   return true;
 }
+
+var ed_scoopables = [
+  'K', 'G', 'B', 'F', 'O', 'A', 'M'
+];
