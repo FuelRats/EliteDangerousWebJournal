@@ -1,13 +1,9 @@
 var edj = {
   selDir: null,
   lastFile: null,
-  lastFileSize: 0,
-  lastByte: 0,
-  byteSize: 1024 * 1024,
   lastLine: 0,
   checkFiles: function (evt) {
     edj.selDir = evt.target.files;
-    console.log(edj.selDir);
     edj.monitorChanges();
   },
   copyFilePath: function (selector) {
@@ -43,8 +39,6 @@ var edj = {
       i++;
     }
 
-    edj.lastFileSize = edj.lastFile.size;
-
     var fr = new FileReader();
     fr.onload = (function (file) {
 
@@ -55,39 +49,17 @@ var edj = {
           l--;
           break;
         }
-        edj.parseLogLine(lines[l]);
+        edu_logparser.parseLogLine(lines[l]);
         l++;
       }
       edj.lastLine = l;
       edj_gui.updateGui();
-      console.log(edj.lastLine);
     });
 
     fr.readAsText(edj.lastFile, 'UTF-8');
     setTimeout(function () { edj.monitorChanges(); }, 1000);
-  },
-  parseLogLine: function (line) {
-    if (isJson(line)) {
-      var logItem = JSON.parse(line);
-      switch (logItem.event) {
-        case 'LoadGame':
-          edjdata.player.cmdr = logItem.Commander;
-          break;
-        case 'Location':
-          edjdata.player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
-          break;
-        case 'FSDJump':
-          edjdata.player.pos = logItem.StarSystem;
-          break;
-        case 'Docked':
-          edjdata.player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
-          break;
-      }
-    }
   }
 };
-
-
 
 (function () {
   document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);
