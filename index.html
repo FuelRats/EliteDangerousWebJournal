@@ -13,13 +13,13 @@
   <p>Windows:
     <span>
       <pre class="code" id="winpath">%userprofile%/Saved Games/Frontier Developments/Elite Dangerous/</pre>
-      <a href="#" onclick="copyPath('#winpath');">Copy</a>
+      <a href="#" onclick="edj.copyFilePath('#winpath');">Copy</a>
     </span>
   </p>
   <p>macOS:
     <span>
       <pre class="code" id="macpath">/Users/&lt;username&gt;/Library/Application Support/Frontier Developments/Elite Dangerous/</pre>
-      <a href="#" onclick="copyPath('#macpath');">Copy</a>
+      <a href="#" onclick="edj.copyFilePath('#macpath');">Copy</a>
     </span>
   </p>
   <label class="directorySelection">
@@ -30,116 +30,10 @@
     <span id="cmdrname">CMDR &lt;Load the journal&gt;</span>
     <span id="location">&lt;Load the journal&gt;</span>
   </div>
-  <script type="text/javascript">
-
-    function copyPath(selector) {
-      var t = document.querySelector(selector);
-      t.contenteditable = true;
-      if (document.body.createTextRange) {
-        var r = document.body.createTextRange();
-        r.moveToElementText(t);
-        r.select();
-        r.execCommand("Copy");
-        r.moveToElementText(null);
-        r.select();
-      } else if (window.getSelection && document.createRange) {
-        var r = document.createRange();
-        r.selectNodeContents(t);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(r);
-        document.execCommand('copy');
-      }
-      t.contenteditable = false;
-    }
-
-    var player = {
-      cmdr: null,
-      pos: null
-    };
-
-    var selDir;
-    var lastFile;
-    var lastFileSize = 0;
-    var lastByte = 0;
-    var byteSize = 1024 * 1024;
-    var lastLine = 0;
-    function checkFiles(evt) {
-      selDir = evt.target.files;
-      monitorChanges();
-    }
-
-    function monitorChanges() {
-      var _files = document.querySelector('#logDirectory').files;
-      var _fileCount = _files.length;
-
-      var i = 0;
-      while (i < _fileCount) {
-        if (undefined == lastFile || _files[i].lastModified > lastFile.lastModified) {
-          lastFile = _files[i];
-        }
-
-        i++;
-      }
-
-      lastFileSize = lastFile.size;
-
-      var fr = new FileReader();
-      fr.onload = (function (file) {
-
-        var lines = this.result.split('\n');
-        var l = lastLine;
-        while (l < lines.length) {
-          if(lines[l] == '') {
-            l--;
-            break;
-          }
-          parseLogLine(lines[l]);
-          l++;
-        }
-        lastLine = l;
-        updateGui();
-      });
-
-      fr.readAsText(lastFile, 'UTF-8');
-      setTimeout(monitorChanges, 1000);
-    }
-
-    function isJson(line) {
-      try { JSON.parse(line); }
-      catch (e) { return false; }
-      return true;
-    }
-
-    function parseLogLine(line) {
-      if (isJson(line)) {
-        var logItem = JSON.parse(line);
-        switch (logItem.event) {
-          case 'LoadGame':
-            player.cmdr = logItem.Commander;
-            break;
-          case 'Location':
-            player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
-            break;
-          case 'FSDJump':
-            player.pos = logItem.StarSystem;
-            break;
-          case 'Docked':
-            player.pos = logItem.StarSystem + (logItem.StationName != undefined ? ', ' + logItem.StationName : '');
-            break;
-        }
-      }
-    }
-
-    function updateGui() {
-      document.getElementById('cmdrname').innerText = 'CMDR ' + player.cmdr;
-      document.getElementById('location').innerText = 'at ' + player.pos;
-    }
-
-    (function () {
-      document.getElementById('logDirectory').addEventListener('change', checkFiles, false);
-    })();
-  </script>
+  <script type="text/javascript" src="edj.main.js"></script>
+  <script type="text/javascript" src="edj.gui.js"></script>
+  <script type="text/javascript" src="edj.utils.js"></script>
+  <script type="text/javascript" src="edj.filereader.js"></script>
 </body>
 
 </html>
