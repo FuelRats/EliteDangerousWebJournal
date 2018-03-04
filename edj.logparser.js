@@ -8,6 +8,9 @@ var edu_logparser = {
           delete logItem.event;
           delete logItem.timestamp;
           edjdata.player.cmdr = logItem;
+          edjdata.player.fuel.max = logItem.FuelCapacity;
+          edjdata.player.fuel.current = logItem.FuelLevel;
+          edjdata.gamemode = logItem.GameMode;
           break;
         case 'Location':
           edjdata.player.pos.starsystem = logItem.StarSystem;

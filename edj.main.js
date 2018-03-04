@@ -35,9 +35,11 @@ var edjdata = {
       starposition: null,
       scoopable: null,
       supercruise: null
+    },
+    fuel: {
+      current: null,
+      max: null
     }
   },
-  current: {
-
-  }
+  gamemode: null
 };
