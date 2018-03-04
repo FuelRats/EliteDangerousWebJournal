@@ -31,10 +31,17 @@ var edu_logparser = {
           edjdata.player.pos.body = null;
           edjdata.player.pos.bodytype = null;
           break;
+        case 'SupercruiseEntry':
+          edjdata.player.pos.docked = false;
+          edjdata.player.pos.body = null;
+          edjdata.player.pos.bodytype = null;
+          edjdata.player.pos.supercruise = true;
+          break;
         case 'SupercruiseExit':
           edjdata.player.pos.docked = false;
           edjdata.player.pos.body = null;
           edjdata.player.pos.bodytype = null;
+          edjdata.player.pos.supercruise = false;
           break;
         case 'Undocked':
           edjdata.player.pos.docked = false;
@@ -47,6 +54,7 @@ var edu_logparser = {
           edjdata.player.pos.starposition = logItem.StarPos;
           edjdata.player.pos.body = logItem.StationName;
           edjdata.player.pos.bodytype = logItem.StationType;
+          edjdata.player.pos.supercruise = false;
           break;
         case 'Rank':
           edjdata.player.rank.cqc.rank = logItem.CQC;

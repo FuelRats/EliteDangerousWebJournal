@@ -33,7 +33,8 @@ var edjdata = {
       body: null,
       bodytype: null,
       starposition: null,
-      scoopable: null
+      scoopable: null,
+      supercruise: null
     }
   },
   current: {
