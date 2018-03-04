@@ -33,6 +33,13 @@ var edu_logparser = {
           edjdata.player.pos.starposition = logItem.StarPos;
           edjdata.player.pos.body = null;
           edjdata.player.pos.bodytype = null;
+          edjdata.player.fuel.current = logItem.FuelLevel;
+          break;
+        case 'FuelScoop':
+          edjdata.player.fuel.current = logItem.Total;
+          break;
+        case 'RefuelAll':
+          edjdata.player.fuel.current = edjdata.player.fuel.max;
           break;
         case 'SupercruiseEntry':
           edjdata.player.pos.docked = false;
