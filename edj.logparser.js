@@ -61,7 +61,6 @@ var edu_logparser = {
         case 'Docked':
           edjdata.player.pos.starsystem = logItem.StarSystem;
           edjdata.player.pos.docked = true;
-          edjdata.player.pos.starposition = logItem.StarPos;
           edjdata.player.pos.body = logItem.StationName;
           edjdata.player.pos.bodytype = logItem.StationType;
           edjdata.player.pos.supercruise = false;
