@@ -1,3 +1,5 @@
+/* globals document, edjdata */
+
 var edj_gui = {
   updateGui: function () {
     document.getElementById('cmdrname').innerText = 'CMDR ' + edjdata.player.cmdr.Commander;

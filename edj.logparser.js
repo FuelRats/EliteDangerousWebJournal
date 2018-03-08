@@ -1,4 +1,7 @@
-var edu_logparser = {
+/* globals isJson, ed_scoopables, console, edjdata */
+/* exported edj_logparser */
+
+var edj_logparser = {
   parseLogLine: function (line) {
     if (isJson(line)) {
       var logItem = JSON.parse(line);
@@ -23,7 +26,7 @@ var edu_logparser = {
           edjdata.player.pos.starsystem = logItem.StarSystem;
           edjdata.player.pos.docked = false;
           edjdata.player.pos.body = null;
-          edjdata.player.pos.starposition = null
+          edjdata.player.pos.starposition = null;
           edjdata.player.pos.bodytype = null;
           edjdata.player.pos.scoopable = ed_scoopables.findIndex(function (item) { return item == logItem.StarClass; }) !== -1;
           break;

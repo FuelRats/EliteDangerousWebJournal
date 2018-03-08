@@ -1,0 +1,8 @@
+{
+  "curly": true,
+  "freeze": true,
+  "noarg": true,
+  "singleGroups": true,
+  "undef": true,
+  "unused": true
+}

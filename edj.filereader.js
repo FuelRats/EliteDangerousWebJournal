@@ -1,3 +1,5 @@
+/* globals document, window, FileReader, setTimeout, edj_logparser, edj_gui */
+
 var edj = {
   selDir: null,
   lastFile: null,
@@ -17,11 +19,11 @@ var edj = {
       r.moveToElementText(null);
       r.select();
     } else if (window.getSelection && document.createRange) {
-      var r = document.createRange();
-      r.selectNodeContents(t);
+      var r2 = document.createRange();
+      r2.selectNodeContents(t);
       var sel = window.getSelection();
       sel.removeAllRanges();
-      sel.addRange(r);
+      sel.addRange(r2);
       document.execCommand('copy');
     }
     t.contenteditable = false;
@@ -40,7 +42,7 @@ var edj = {
     }
 
     var fr = new FileReader();
-    fr.onload = (function (file) {
+    fr.onload = function (file) {
 
       var lines = this.result.split('\n');
       var l = edj.lastLine;
@@ -50,13 +52,13 @@ var edj = {
           break;
         }*/
         if (edj.lastLine !== lines[l]) {
-          edu_logparser.parseLogLine(lines[l]);
+          edj_logparser.parseLogLine(lines[l]);
         }
         l++;
       }
       edj.lastLine = l;
       edj_gui.updateGui();
-    });
+    };
 
     fr.readAsText(edj.lastFile, 'UTF-8');
     setTimeout(function () { edj.monitorChanges(); }, 1000);
