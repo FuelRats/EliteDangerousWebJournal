@@ -1,3 +1,4 @@
+/* exported edjdata */
 var edjdata = {
   player: {
     cmdr: null,
