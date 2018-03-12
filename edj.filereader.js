@@ -1,70 +1,69 @@
-/* globals document, window, FileReader, setTimeout, edj_logparser, edj_gui */
-
-var edj = {
+/* globals document, window, FileReader, setTimeout, edjLogparser, edjGui */
+const edj = {
   selDir: null,
   lastFile: null,
   lastLine: 0,
-  checkFiles: function (evt) {
+  checkFiles(evt) {
     edj.selDir = evt.target.files;
     edj.monitorChanges();
   },
-  copyFilePath: function (selector) {
-    var t = document.querySelector(selector);
+  copyFilePath(selector) {
+    const t = document.querySelector(selector);
     t.contenteditable = true;
     if (document.body.createTextRange) {
-      var r = document.body.createTextRange();
+      const r = document.body.createTextRange();
       r.moveToElementText(t);
       r.select();
-      r.execCommand("Copy");
+      r.execCommand('Copy');
       r.moveToElementText(null);
       r.select();
     } else if (window.getSelection && document.createRange) {
-      var r2 = document.createRange();
+      const r2 = document.createRange();
       r2.selectNodeContents(t);
-      var sel = window.getSelection();
+      const sel = window.getSelection();
       sel.removeAllRanges();
       sel.addRange(r2);
       document.execCommand('copy');
     }
     t.contenteditable = false;
   },
-  monitorChanges: function () {
-    var _files = document.querySelector('#logDirectory').files;
-    var _fileCount = _files.length;
+  monitorChanges() {
+    const _files = document.querySelector('#logDirectory').files;
+    const _fileCount = _files.length;
 
-    var i = 0;
+    let i = 0;
     while (i < _fileCount) {
-      if (undefined == edj.lastFile || _files[i].lastModified > edj.lastFile.lastModified) {
+      if (edj.lastFile === null || _files[i].lastModified > edj.lastFile.lastModified) {
         edj.lastFile = _files[i];
       }
 
       i++;
     }
 
-    var fr = new FileReader();
-    fr.onload = function (file) {
-
-      var lines = this.result.split('\n');
-      var l = edj.lastLine;
-      while (l < lines.length) {
-        /*if (lines[l] == '') {
-          l--;
-          break;
-        }*/
-        if (edj.lastLine !== lines[l]) {
-          edj_logparser.parseLogLine(lines[l]);
-        }
-        l++;
-      }
-      edj.lastLine = l;
-      edj_gui.updateGui();
-    };
+    const fr = new FileReader();
+    fr.onload = edj.fileOnLoad;
 
     fr.readAsText(edj.lastFile, 'UTF-8');
-    setTimeout(function () { edj.monitorChanges(); }, 1000);
-  }
+    setTimeout(() => { edj.monitorChanges(); }, 1000);
+  },
+  fileOnLoad() {
+    const lines = this.result.split('\n');
+    let l = edj.lastLine;
+    while (l < lines.length) {
+      /*if (lines[l] == '') {
+        l--;
+        break;
+      }*/
+      if (edj.lastLine !== lines[l]) {
+        edjLogparser.parseLogLine(lines[l]);
+      }
+      l++;
+    }
+    edj.lastLine = l;
+    edjGui.updateGui();
+  },
 };
 
-(function () {
+(function doneLoading() {
   document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);
-})();
+}());

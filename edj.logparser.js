@@ -1,10 +1,9 @@
-/* globals isJson, ed_scoopables, console, edjdata */
-/* exported edj_logparser */
+/* globals isJson, edScoopables, console, edjdata */
 
-var edj_logparser = {
-  parseLogLine: function (line) {
+const edjLogparser = {
+  parseLogLine(line) {
     if (isJson(line)) {
-      var logItem = JSON.parse(line);
+      const logItem = JSON.parse(line);
       console.log(logItem);
       switch (logItem.event) {
         case 'LoadGame':
@@ -28,7 +27,7 @@ var edj_logparser = {
           edjdata.player.pos.body = null;
           edjdata.player.pos.starposition = null;
           edjdata.player.pos.bodytype = null;
-          edjdata.player.pos.scoopable = ed_scoopables.findIndex(function (item) { return item == logItem.StarClass; }) !== -1;
+          edjdata.player.pos.scoopable = edScoopables.findIndex((item) => item === logItem.StarClass) !== -1;
           break;
         case 'FSDJump':
           edjdata.player.pos.starsystem = logItem.StarSystem;
@@ -84,7 +83,9 @@ var edj_logparser = {
           edjdata.player.rank.federation.progress = logItem.Federation;
           edjdata.player.rank.trade.progress = logItem.Trade;
           break;
+        default:
+          break;
       }
     }
-  }
+  },
 };

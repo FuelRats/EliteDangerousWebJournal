@@ -4,5 +4,7 @@
   "noarg": true,
   "singleGroups": true,
   "undef": true,
-  "unused": true
+  "unused": true,
+  "esversion": 6,
+  "varstmt": true
 }
