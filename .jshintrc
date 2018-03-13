@@ -1,4 +1,11 @@
 {
+  "globals": {
+    "edjdata": true,
+    "edjLogparser": true,
+    "edScoopables": true,
+    "edj": true,
+    "console": false
+  },
   "curly": true,
   "freeze": true,
   "noarg": true,

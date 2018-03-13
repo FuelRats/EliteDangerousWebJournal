@@ -6,7 +6,9 @@
     "preval": false,
     "edjdata": true,
     "edjLogparser": true,
-    "edScoopables": true
+    "edScoopables": true,
+    "edj": true,
+    "console": false
   },
   "extends": "airbnb",
   "rules": {

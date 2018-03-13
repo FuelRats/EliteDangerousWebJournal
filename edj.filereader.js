@@ -1,5 +1,5 @@
 /* globals document, window, FileReader, setTimeout, edjLogparser, edjGui */
-const edj = {
+edj = {
   selDir: null,
   lastFile: null,
   lastLine: 0,
@@ -61,6 +61,15 @@ const edj = {
     }
     edj.lastLine = l;
     edjGui.updateGui();
+  },
+  isJson(line) {
+    try {
+      JSON.parse(line);
+    } catch (e) {
+      return false;
+    }
+
+    return true;
   },
 };
 

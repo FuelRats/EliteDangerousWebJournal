@@ -1,8 +1,6 @@
-/* globals isJson, edScoopables, console, edjdata */
-
-const edjLogparser = {
+edjLogparser = {
   parseLogLine(line) {
-    if (isJson(line)) {
+    if (edj.isJson(line)) {
       const logItem = JSON.parse(line);
       console.log(logItem);
       switch (logItem.event) {

@@ -1,5 +1,4 @@
-/* exported edjdata */
-const edjdata = {
+edjdata = {
   player: {
     cmdr: null,
     rank: {
