@@ -1,7 +1,3 @@
-if (typeof process !== 'undefined') {
-  console.log(process);
-}
-
 edjApp = {
   is_electron: typeof process !== 'undefined',
   is_windows: typeof process !== 'undefined' && process.platform === 'win32',

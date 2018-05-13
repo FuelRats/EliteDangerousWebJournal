@@ -9,7 +9,9 @@
     "edjLogparser": true,
     "edScoopables": true,
     "edj": true,
-    "console": false
+    "console": false,
+    "process": true,
+    "document": true
   },
   "extends": "airbnb",
   "rules": {

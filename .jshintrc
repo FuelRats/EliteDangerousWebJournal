@@ -5,7 +5,9 @@
     "edjLogparser": true,
     "edScoopables": true,
     "edj": true,
-    "console": false
+    "console": false,
+    "process": true,
+    "document": true
   },
   "curly": true,
   "freeze": true,

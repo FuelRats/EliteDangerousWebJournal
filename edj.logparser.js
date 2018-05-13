@@ -2,7 +2,6 @@ edjLogparser = {
   parseLogLine(line) {
     if (edj.isJson(line)) {
       const logItem = JSON.parse(line);
-
       switch (logItem.event) {
         case 'LoadGame':
           delete logItem.event;
