@@ -5,7 +5,10 @@
   "main": "start.js",
   "scripts": {
     "start": "electron .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -18,6 +21,17 @@
   },
   "homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
   "devDependencies": {
-    "electron": "^2.0.0"
+    "electron": "^2.0.0",
+    "electron-builder": "^20.13.3"
+  },
+  "build": {
+    "appId": "com.fuelrats.elitedangerouswebjournal",
+    "productName": "Elite Dangerous: Journal Reader",
+    "win": {
+      "target": "portable"
+    },
+    "portable": {
+      "requestExecutionLevel": "user"
+    }
   }
 }

@@ -19,3 +19,13 @@ function createWindow() {
 }
 
 app.on('ready', createWindow);
+
+app.on('before-quit', () => {
+  win.close();
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});

@@ -99,9 +99,10 @@ edj = {
     if (typeof process !== 'undefined' && edjApp.is_electron) {
       const fs = require('fs');
       if (edjApp.is_windows) {
-        const userProfile = `${process.env.HOME}\\Saved Games\\Frontier Developments\\Elite Dangerous\\`;
-        edj.profileDir = userProfile;
-        fs.readdir(userProfile, (err, files) => {
+        const userProfile = (typeof process.env.HOME !== 'undefined' ? process.env.HOME : process.env.USERPROFILE);
+        const journalFolder = `${userProfile}\\Saved Games\\Frontier Developments\\Elite Dangerous\\`;
+        edj.profileDir = journalFolder;
+        fs.readdir(journalFolder, (err, files) => {
           edj.selDir = files;
         });
       }
