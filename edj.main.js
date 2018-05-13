@@ -1,3 +1,12 @@
+if (typeof process !== 'undefined') {
+  console.log(process);
+}
+
+edjApp = {
+  is_electron: typeof process !== 'undefined',
+  is_windows: typeof process !== 'undefined' && process.platform === 'win32',
+};
+
 edjdata = {
   player: {
     cmdr: null,
@@ -43,3 +52,8 @@ edjdata = {
   },
   gamemode: null,
 };
+
+if (edjApp.is_electron) {
+  document.querySelector('.platformHelp').style.display = 'none';
+  document.querySelector('.directorySelection').style.display = 'none';
+}

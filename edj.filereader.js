@@ -1,5 +1,6 @@
 /* globals document, window, FileReader, setTimeout, edjLogparser, edjGui */
 edj = {
+  profileDir: null,
   selDir: null,
   lastFile: null,
   lastLine: 0,
@@ -28,26 +29,49 @@ edj = {
     t.contenteditable = false;
   },
   monitorChanges() {
-    const _files = document.querySelector('#logDirectory').files;
-    const _fileCount = _files.length;
+    if (edj.selDir.toString() === '[object FileList]') {
+      const _files = edj.selDir;
+      const _fileCount = _files.length;
+      let i = 0;
+      while (i < _fileCount) {
+        if (edj.lastFile === null || _files[i].lastModified > edj.lastFile.lastModified) {
+          edj.lastFile = _files[i];
+        }
 
-    let i = 0;
-    while (i < _fileCount) {
-      if (edj.lastFile === null || _files[i].lastModified > edj.lastFile.lastModified) {
-        edj.lastFile = _files[i];
+        i++;
       }
+      const fr = new FileReader();
+      fr.onload = (res) => {
+        edj.fileOnLoad(res.target.result);
+      };
+      fr.readAsText(edj.lastFile, 'UTF-8');
+    } else {
+      const _files = edj.selDir;
+      const _fileCount = _files.length;
+      let i = 0;
+      while (i < _fileCount) {
+        if (edj.lastFile === null || _files[i] !== edj.lastFile) {
+          edj.lastFile = _files[i];
+        }
 
-      i++;
+        i++;
+      }
+      const fs = require('fs');
+      fs.readFile(`${edj.profileDir}${edj.lastFile}`, { encoding: 'UTF-8' }, (err, str) => {
+        if (err !== null) {
+          console.log(err);
+        }
+        if (typeof str !== 'undefined') {
+          edj.fileOnLoad(str);
+        }
+      });
+
+      setTimeout(() => { edj.loadLogFiles(); }, 1000);
     }
-
-    const fr = new FileReader();
-    fr.onload = edj.fileOnLoad;
-
-    fr.readAsText(edj.lastFile, 'UTF-8');
     setTimeout(() => { edj.monitorChanges(); }, 1000);
   },
-  fileOnLoad() {
-    const lines = this.result.split('\n');
+  fileOnLoad(fileContent) {
+    const lines = fileContent.split('\n');
     let l = edj.lastLine;
     while (l < lines.length) {
       /*if (lines[l] == '') {
@@ -71,8 +95,24 @@ edj = {
 
     return true;
   },
+  loadLogFiles() {
+    if (typeof process !== 'undefined' && edjApp.is_electron) {
+      const fs = require('fs');
+      if (edjApp.is_windows) {
+        const userProfile = `${process.env.HOME}\\Saved Games\\Frontier Developments\\Elite Dangerous\\`;
+        edj.profileDir = userProfile;
+        fs.readdir(userProfile, (err, files) => {
+          edj.selDir = files;
+        });
+      }
+    }
+  },
 };
 
 (function doneLoading() {
   document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);
+  if (typeof process !== 'undefined' && edjApp.is_electron) {
+    edj.loadLogFiles();
+    setTimeout(() => { edj.monitorChanges(); }, 500);
+  }
 }());

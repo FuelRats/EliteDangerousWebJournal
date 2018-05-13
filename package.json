@@ -1,0 +1,23 @@
+{
+  "name": "elite-dangerous-webjournalreader",
+  "version": "1.0.0",
+  "description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
+  "main": "start.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FuelRats/EliteDangerousWebJournal.git"
+  },
+  "author": "Chris Gårdenberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FuelRats/EliteDangerousWebJournal/issues"
+  },
+  "homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
+  "devDependencies": {
+    "electron": "^2.0.0"
+  }
+}

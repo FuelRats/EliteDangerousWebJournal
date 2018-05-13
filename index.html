@@ -2,6 +2,7 @@
 <html>
 
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
   <title>Elite Dangerous: Journal Reader</title>
   <link rel="stylesheet" type="text/css" href="edj.main.css" />
 </head>
@@ -9,19 +10,15 @@
 <body>
   <h1>Elite Dangerous: Web Journal Reader</h1>
   <h2>Welcome Commander</h2>
-  <p>Select your journal directory:</p>
-  <p>Windows:
-    <span>
-      <pre class="code" id="winpath">%userprofile%/Saved Games/Frontier Developments/Elite Dangerous/</pre>
-      <a href="#" onclick="edj.copyFilePath('#winpath');">Copy</a>
-    </span>
-  </p>
-  <p>macOS:
-    <span>
-      <pre class="code" id="macpath">/Users/&lt;username&gt;/Library/Application Support/Frontier Developments/Elite Dangerous/</pre>
-      <a href="#" onclick="edj.copyFilePath('#macpath');">Copy</a>
-    </span>
-  </p>
+  <div class="platformHelp">
+    <p>Select your journal directory:</p>
+    <p>Windows:
+      <span>
+        <pre class="code" id="winpath">%userprofile%/Saved Games/Frontier Developments/Elite Dangerous/</pre>
+        <a href="#" onclick="edj.copyFilePath('#winpath');">Copy</a>
+      </span>
+    </p>
+  </div>
   <label class="directorySelection">
     <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir /> Select your Journal directory
   </label>

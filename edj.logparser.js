@@ -2,14 +2,18 @@ edjLogparser = {
   parseLogLine(line) {
     if (edj.isJson(line)) {
       const logItem = JSON.parse(line);
-      console.log(logItem);
+
       switch (logItem.event) {
         case 'LoadGame':
           delete logItem.event;
           delete logItem.timestamp;
           edjdata.player.cmdr = logItem;
-          edjdata.player.fuel.max = logItem.FuelCapacity;
-          edjdata.player.fuel.current = logItem.FuelLevel;
+          if (typeof logItem.FuelCapacity !== 'undefined') {
+            edjdata.player.fuel.max = logItem.FuelCapacity;
+          }
+          if (typeof logItem.FuelLevel !== 'undefined') {
+            edjdata.player.fuel.current = logItem.FuelLevel;
+          }
           edjdata.gamemode = logItem.GameMode;
           break;
         case 'Location':
@@ -33,7 +37,9 @@ edjLogparser = {
           edjdata.player.pos.starposition = logItem.StarPos;
           edjdata.player.pos.body = null;
           edjdata.player.pos.bodytype = null;
-          edjdata.player.fuel.current = logItem.FuelLevel;
+          if (typeof logItem.FuelLevel !== 'undefined') {
+            edjdata.player.fuel.current = logItem.FuelLevel;
+          }
           break;
         case 'FuelScoop':
           edjdata.player.fuel.current = logItem.Total;

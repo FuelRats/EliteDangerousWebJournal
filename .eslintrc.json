@@ -5,6 +5,7 @@
   "globals": {
     "preval": false,
     "edjdata": true,
+    "edjApp": true,
     "edjLogparser": true,
     "edScoopables": true,
     "edj": true,
