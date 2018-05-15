@@ -34,10 +34,11 @@ edj = {
       const _fileCount = _files.length;
       let i = 0;
       while (i < _fileCount) {
-        if (edj.lastFile === null || _files[i].lastModified > edj.lastFile.lastModified) {
-          edj.lastFile = _files[i];
+        if (_files[i].name.match(/Journal\.\d+\.\d+\.log/gi)) {
+          if (edj.lastFile === null || _files[i].lastModified > edj.lastFile.lastModified) {
+            edj.lastFile = _files[i];
+          }
         }
-
         i++;
       }
       const fr = new FileReader();
@@ -50,10 +51,11 @@ edj = {
       const _fileCount = _files.length;
       let i = 0;
       while (i < _fileCount) {
-        if (edj.lastFile === null || _files[i] !== edj.lastFile) {
-          edj.lastFile = _files[i];
+        if (_files[i].match(/Journal\.\d+\.\d+\.log/gi)) {
+          if (edj.lastFile === null || _files[i] !== edj.lastFile) {
+            edj.lastFile = _files[i];
+          }
         }
-
         i++;
       }
       const fs = require('fs');
@@ -74,10 +76,6 @@ edj = {
     const lines = fileContent.split('\n');
     let l = edj.lastLine;
     while (l < lines.length) {
-      /*if (lines[l] == '') {
-        l--;
-        break;
-      }*/
       if (edj.lastLine !== lines[l]) {
         edjLogparser.parseLogLine(lines[l]);
       }
