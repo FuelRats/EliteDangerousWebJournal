@@ -52,4 +52,6 @@ edjdata = {
 if (edjApp.is_electron) {
   document.querySelector('.platformHelp').style.display = 'none';
   document.querySelector('.directorySelection').style.display = 'none';
+} else {
+  document.querySelector('.winpathButton').addEventListener('click', () => { edj.copyFilePath('#winpath'); });
 }
