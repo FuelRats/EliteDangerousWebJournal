@@ -4,6 +4,7 @@ edj = {
   selDir: null,
   lastFile: null,
   lastLine: 0,
+  currentTail: null,
   checkFiles(evt) {
     edj.selDir = evt.target.files;
     edj.monitorChanges();
@@ -46,6 +47,7 @@ edj = {
         edj.fileOnLoad(res.target.result);
       };
       fr.readAsText(edj.lastFile, 'UTF-8');
+      setTimeout(() => { edj.monitorChanges(); }, 1000);
     } else {
       const _files = edj.selDir;
       const _fileCount = _files.length;
@@ -58,19 +60,35 @@ edj = {
         }
         i++;
       }
-      const fs = require('fs');
-      fs.readFile(`${edj.profileDir}${edj.lastFile}`, { encoding: 'UTF-8' }, (err, str) => {
-        if (err !== null) {
-          console.log(err);
-        }
-        if (typeof str !== 'undefined') {
-          edj.fileOnLoad(str);
-        }
-      });
+      if (typeof process !== 'undefined' && edjApp.is_electron) {
+        if(edj.lastFile !== null) {
 
+          // Read the contents for an existing file, then tail it.
+          const fs = require('fs');
+          fs.readFile(`${edj.profileDir}${edj.lastFile}`, { encoding: 'UTF-8' }, (err, str) => {
+            if (err !== null) {
+            }
+            if (typeof str !== 'undefined') {
+              edj.fileOnLoad(str);
+            }
+          });
+
+          edj.tailLogFile(`${edj.profileDir}${edj.lastFile}`);
+        }
+      } else {
+        const fs = require('fs');
+        fs.readFile(`${edj.profileDir}${edj.lastFile}`, { encoding: 'UTF-8' }, (err, str) => {
+          if (err !== null) {
+            console.log(err);
+          }
+          if (typeof str !== 'undefined') {
+            edj.fileOnLoad(str);
+          }
+        });
+      }
       setTimeout(() => { edj.loadLogFiles(); }, 1000);
+      setTimeout(() => { edj.monitorChanges(); }, 1000);
     }
-    setTimeout(() => { edj.monitorChanges(); }, 1000);
   },
   fileOnLoad(fileContent) {
     const lines = fileContent.split('\n');
@@ -95,6 +113,7 @@ edj = {
   },
   loadLogFiles() {
     if (typeof process !== 'undefined' && edjApp.is_electron) {
+
       const fs = require('fs');
       if (edjApp.is_windows) {
         const userProfile = (typeof process.env.HOME !== 'undefined' ? process.env.HOME : process.env.USERPROFILE);
@@ -106,6 +125,23 @@ edj = {
       }
     }
   },
+  tailLogFile(fileName) {
+    if(fileName === 'null')
+      return;
+    if(fileName == edj.currentTail) {
+      return;
+    }
+    
+    const Tail = require('tail').Tail;
+    const logTail = new Tail(fileName);
+
+    logTail.on('line', line => {
+      edjLogparser.parseLogLine(line);
+    });
+
+    logTail.on('error', error => { console.error(error);});
+    edj.currentTail = fileName;
+  }
 };
 
 (function doneLoading() {
