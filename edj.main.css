@@ -52,3 +52,21 @@ pre.code {
   background-color: rgb(119, 47, 59);
   min-width: 400px;
 }
+
+#fuelLevel {
+  min-height: 22px;
+  max-height: 22px;
+  width: 300px;
+  border: 1px solid #f0f0f0;
+  background-color: #000000;
+  padding: 2px;
+}
+
+#fuelBar {
+  min-height: 16px;
+  max-height: 16px;
+  background-color: #c5c5c5;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}

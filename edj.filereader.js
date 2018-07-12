@@ -7,7 +7,7 @@ edj = {
   currentTail: null,
   checkFiles(evt) {
     edj.selDir = evt.target.files;
-    edj.monitorChanges();
+    edj.monitorChanges(edj.selDir);
   },
   copyFilePath(selector) {
     const t = document.querySelector(selector);
