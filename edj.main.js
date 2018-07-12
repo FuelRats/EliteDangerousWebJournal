@@ -33,20 +33,22 @@ edjdata = {
       },
     },
     pos: {
-      starsystem: null,
-      docked: true,
-      body: null,
-      bodytype: null,
-      starposition: null,
-      scoopable: null,
-      supercruise: null,
+      StarSystem: null,
+      Docked: true,
+      Body: null,
+      BodyType: null,
+      StarPos: null,
+      Scoopable: null,
+      Supercruise: null,
     },
     fuel: {
       current: null,
       max: null,
     },
+    materials: { Raw: [], Manufactured: []}
   },
   gamemode: null,
+  cansynthesizelifesupport: false
 };
 
 if (edjApp.is_electron) {

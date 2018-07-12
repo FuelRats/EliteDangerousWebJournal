@@ -29,9 +29,11 @@ edj = {
     }
     t.contenteditable = false;
   },
-  monitorChanges() {
-    if (edj.selDir.toString() === '[object FileList]') {
-      const _files = edj.selDir;
+  async monitorChanges(_selDir) {
+    if(_selDir === null)
+      return;
+    if (_selDir.toString() === '[object FileList]') {
+      const _files = _selDir;
       const _fileCount = _files.length;
       let i = 0;
       while (i < _fileCount) {
@@ -47,9 +49,9 @@ edj = {
         edj.fileOnLoad(res.target.result);
       };
       fr.readAsText(edj.lastFile, 'UTF-8');
-      setTimeout(() => { edj.monitorChanges(); }, 1000);
+      setTimeout(() => { edj.monitorChanges(_selDir); }, 1000);
     } else {
-      const _files = edj.selDir;
+      const _files = _selDir;
       const _fileCount = _files.length;
       let i = 0;
       while (i < _fileCount) {
@@ -86,8 +88,7 @@ edj = {
           }
         });
       }
-      setTimeout(() => { edj.loadLogFiles(); }, 1000);
-      setTimeout(() => { edj.monitorChanges(); }, 1000);
+      setTimeout(async function() { _selDir = await edj.loadLogFiles(); edj.monitorChanges(_selDir); }, 1000);
     }
   },
   fileOnLoad(fileContent) {
@@ -111,7 +112,7 @@ edj = {
 
     return true;
   },
-  loadLogFiles() {
+  async loadLogFiles() {
     if (typeof process !== 'undefined' && edjApp.is_electron) {
 
       const fs = require('fs');
@@ -119,11 +120,11 @@ edj = {
         const userProfile = (typeof process.env.HOME !== 'undefined' ? process.env.HOME : process.env.USERPROFILE);
         const journalFolder = `${userProfile}\\Saved Games\\Frontier Developments\\Elite Dangerous\\`;
         edj.profileDir = journalFolder;
-        fs.readdir(journalFolder, (err, files) => {
-          edj.selDir = files;
-        });
+        edj.selDir = fs.readdirSync(journalFolder);
       }
     }
+
+    return edj.selDir;
   },
   tailLogFile(fileName) {
     if(fileName === 'null')
@@ -144,10 +145,10 @@ edj = {
   }
 };
 
-(function doneLoading() {
+(async function doneLoading() {
   document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);
   if (typeof process !== 'undefined' && edjApp.is_electron) {
-    edj.loadLogFiles();
-    setTimeout(() => { edj.monitorChanges(); }, 500);
+    let files = await edj.loadLogFiles();
+    edj.monitorChanges(files);
   }
 }());
