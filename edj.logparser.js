@@ -3,9 +3,9 @@ edjLogparser = {
         if (edj.isJson(line)) {
             const logItem = JSON.parse(line);
             switch (logItem.event) {
-              case 'Continued':
-              // TODO: Handle continued logs
-              break;
+                case 'Continued':
+                    // TODO: Handle continued logs
+                    break;
                 case 'AfmuRepairs':
                 case 'ApproachBody':
                 case 'ApproachSettlement':
@@ -151,7 +151,7 @@ edjLogparser = {
                         Commander: logItem.Name
                     };
                     break;
-                    case 'CommitCrime':
+                case 'CommitCrime':
                     break;
                 case 'CockpitBreached':
                     break;
@@ -301,9 +301,9 @@ edjLogparser = {
                         }
                     };
                     break;
-                    case 'SelfDestruct':
+                case 'SelfDestruct':
                     break;
-                    case 'SystemsShutdown':
+                case 'SystemsShutdown':
                     break;
                 case 'MaterialTrade':
                     break;
@@ -318,6 +318,14 @@ edjLogparser = {
                 case 'Synthesis':
                     // TODO: Decrease the stored materials, and update the `cansynthesizelifesupport`-variable
                     console.log(logItem);
+                    break;
+                case 'WingAdd':
+                    break;
+                case 'WingInvite':
+                    break;
+                case 'WingLeave':
+                    break;
+                case 'WingJoin':
                     break;
                 default:
                     console.log(line);
