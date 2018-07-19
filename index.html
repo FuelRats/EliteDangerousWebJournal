@@ -8,8 +8,10 @@
 </head>
 
 <body>
-  <h1>Elite Dangerous: Web Journal Reader</h1>
-  <h2>Welcome Commander</h2>
+  <div class="htmlHeader">
+    <h1>Elite Dangerous: Web Journal Reader</h1>
+    <h2>Welcome Commander</h2>
+  </div>
   <div class="platformHelp">
     <p>Select your journal directory:</p>
     <p>Windows:
@@ -18,11 +20,12 @@
         <a href="#" class="winpathButton">Copy</a>
       </span>
     </p>
+    <label class="directorySelection">
+      <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir /> Select your Journal directory
+    </label>
+    <br />
   </div>
-  <label class="directorySelection">
-    <input type="file" id="logDirectory" multiple webkitdirectory directory mozdirectory allowdir /> Select your Journal directory
-  </label>
-  <br />
+
   <div class="player-info">
     <span id="cmdrname">CMDR &lt;Load the journal&gt;</span>
     <span id="location">&lt;Load the journal&gt;</span>
@@ -30,7 +33,7 @@
       <div id="fuelBar"></div>
     </div>
     <div id="canSynthOxygen">
-      
+
     </div>
   </div>
   <script type="text/javascript" src="edj.main.js?v=1.0.3"></script>

@@ -45,7 +45,10 @@ edjdata = {
       current: null,
       max: null,
     },
-    materials: { Raw: [], Manufactured: []}
+    materials: {
+      Raw: [],
+      Manufactured: []
+    }
   },
   gamemode: null,
   cansynthesizelifesupport: false
@@ -54,6 +57,9 @@ edjdata = {
 if (edjApp.is_electron) {
   document.querySelector('.platformHelp').style.display = 'none';
   document.querySelector('.directorySelection').style.display = 'none';
+  document.querySelector('.htmlHeader').style.display = 'none';
 } else {
-  document.querySelector('.winpathButton').addEventListener('click', () => { edj.copyFilePath('#winpath'); });
+  document.querySelector('.winpathButton').addEventListener('click', () => {
+    edj.copyFilePath('#winpath');
+  });
 }
