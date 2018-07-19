@@ -1,13 +1,15 @@
-* { 
-  box-sizing: border-box; 
-  font-family: "Open Sans", sans-serif; 
+* {
+  box-sizing: border-box;
+  font-family: "Open Sans", sans-serif;
 }
-body { 
-  font-size: 18px; 
+
+body {
+  font-size: 18px;
   background-color: rgb(29, 29, 29);
   color: rgb(199, 199, 199);
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 .ed-dropzone {
   min-height: 200px;
   border: 5px dotted #157066;
@@ -18,7 +20,10 @@ body {
   max-width: 800px;
 }
 
-a { color: pink; text-decoration: none;}
+a {
+  color: pink;
+  text-decoration: none;
+}
 
 pre.code {
   display: inline;
@@ -27,7 +32,7 @@ pre.code {
   border-radius: 10px;
   padding: 10px;
   font-family: Courier New, Courier, monospace;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .directorySelection input[type="file"] {
@@ -69,4 +74,5 @@ pre.code {
   display: inline-block;
   margin: 0;
   padding: 0;
+  transition: width 0.5s;
 }

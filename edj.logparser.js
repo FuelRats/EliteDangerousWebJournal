@@ -36,7 +36,7 @@ edjLogparser = {
                 case 'DataScanned':
                 case 'DockFigher':
                 case 'DockSRV':
-                case 'DiscoveryScan':
+
                 case 'EjectCargo':
                 case 'EndCrewSession':
                 case 'EngineerApply':
@@ -73,7 +73,6 @@ edjLogparser = {
                 case 'ModuleSellRemote':
                 case 'ModuleStore':
                 case 'ModuleSwap':
-                case 'Music':
                 case 'NavBeaconScan':
                 case 'NewCommander':
                 case 'NpcCrewPaidWage':
@@ -134,17 +133,26 @@ edjLogparser = {
                 case 'USSDrop':
                 case 'VehicleSwitch':
                     // We'll just ignore these events, since they contain nothing funny at the moment.
+                    console.log(line);
+                    break;
+                case 'DiscoveryScan':
+                case 'Music':
                     break;
                 case 'Died':
                     // TODO: Notification about client dead
+                    console.log(logItem);
                     break;
                 case 'EscapeInterdiction':
+                    console.log(logItem);
                     break;
                 case 'HeatDamage':
+                    console.log(logItem);
                     break;
                 case 'HullDamage':
+                    console.log(logItem);
                     break;
                 case 'Interdicted':
+                    console.log(logItem);
                     break;
                 case 'Commander':
                     edjdata.player.cmdr = {
@@ -152,8 +160,10 @@ edjLogparser = {
                     };
                     break;
                 case 'CommitCrime':
+                    console.log(logItem);
                     break;
                 case 'CockpitBreached':
+                    console.log(logItem);
                     break;
                 case 'LoadGame':
                     delete logItem.event;
@@ -205,7 +215,17 @@ edjLogparser = {
                         }
                     };
                     break;
+                case 'Market':
+                    edjdata.player.pos = {
+                        ...edjdata.player.pos,
+                        ...{
+                            StarSystem: logItem.StarSystem,
+                            Body: logItem.StationName
+                        }
+                    };
+                    break;
                 case 'ShieldState':
+                    console.log(logItem);
                     break;
                 case 'FuelScoop':
                     edjdata.player.fuel.current = logItem.Total;
@@ -214,6 +234,7 @@ edjLogparser = {
                     edjdata.player.fuel.current = edjdata.player.fuel.max;
                     break;
                 case 'RefuelPartial':
+                    console.log(logItem);
                     break;
                 case 'SupercruiseEntry':
                     edjdata.player.pos.Docked = false;
@@ -243,16 +264,21 @@ edjLogparser = {
                     edjdata.player.pos.SuperCruise = false;
                     break;
                 case 'DockingCancelled':
+                    console.log(logItem);
                     break;
                 case 'DockingDenied':
+                    console.log(logItem);
                     break;
                 case 'DockingTimeout':
+                    console.log(logItem);
                     break;
                 case 'DockingRequested':
                     // TODO: Add notification to client-kiwi that they have reached a station
+                    console.log(logItem);
                     break;
                 case 'DockingGranted':
                     // TODO: See above
+                    console.log(logItem);
                     break;
                 case 'Rank':
                     edjdata.player.rank.cqc.rank = logItem.CQC;
@@ -272,12 +298,15 @@ edjLogparser = {
                     break;
                 case 'Loadout':
                     // We want to see what type of ship the user is using.
+                    console.log(logItem);
                     break;
                 case 'SRVDestroyed':
+                    console.log(logItem);
                     break;
                 case 'SendText':
                 case 'ReceiveText':
                     // TODO: Add a chatbox, where you can see all communication
+                    console.log(logItem);
                     break;
                 case 'Materials':
                     let hasIronForSynth = false;
@@ -302,30 +331,39 @@ edjLogparser = {
                     };
                     break;
                 case 'SelfDestruct':
+                    console.log(logItem);
                     break;
                 case 'SystemsShutdown':
+                    console.log(logItem);
                     break;
                 case 'MaterialTrade':
+                    console.log(logItem);
                     break;
                 case 'MaterialCollected':
                     // TODO: Increase the stored materials, and update the `cansynthesizelifesupport`-variable
                     console.log(logItem);
                     break;
                 case 'MaterialDiscovered':
+                    console.log(logItem);
                     break;
                 case 'MaterialDiscarded':
+                    console.log(logItem);
                     break;
                 case 'Synthesis':
                     // TODO: Decrease the stored materials, and update the `cansynthesizelifesupport`-variable
                     console.log(logItem);
                     break;
                 case 'WingAdd':
+                    console.log(logItem);
                     break;
                 case 'WingInvite':
+                    console.log(logItem);
                     break;
                 case 'WingLeave':
+                    console.log(logItem);
                     break;
                 case 'WingJoin':
+                    console.log(logItem);
                     break;
                 default:
                     console.log(line);
