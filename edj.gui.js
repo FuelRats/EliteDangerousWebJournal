@@ -6,7 +6,9 @@ const edjGui = {
     edjGui.update_fuel_level();
   },
   write_cmdr_position() {
-    document.getElementById('cmdrname').innerText = `CMDR ${edjdata.player.cmdr.Commander}`;
+    if (edjdata.player.cmdr != null) {
+      document.getElementById('cmdrname').innerText = `CMDR ${edjdata.player.cmdr.Commander}`;
+    }
     const playerPos = edjGui.get_cmdr_position();
     if (playerPos.length > 0) {
       document.getElementById('location').innerText = `in ${playerPos.join(', ')}`;
