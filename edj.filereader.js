@@ -30,7 +30,7 @@ edj = {
     t.contenteditable = false;
   },
   async monitorChanges(_selDir) {
-    if(_selDir === null)
+    if (_selDir === null)
       return;
     if (_selDir.toString() === '[object FileList]') {
       const _files = _selDir;
@@ -49,7 +49,9 @@ edj = {
         edj.fileOnLoad(res.target.result);
       };
       fr.readAsText(edj.lastFile, 'UTF-8');
-      setTimeout(() => { edj.monitorChanges(_selDir); }, 1000);
+      setTimeout(() => {
+        edj.monitorChanges(_selDir);
+      }, 1000);
     } else {
       const _files = _selDir;
       const _fileCount = _files.length;
@@ -63,13 +65,14 @@ edj = {
         i++;
       }
       if (typeof process !== 'undefined' && edjApp.is_electron) {
-        if(edj.lastFile !== null) {
+        if (edj.lastFile !== null) {
 
           // Read the contents for an existing file, then tail it.
           const fs = require('fs');
-          fs.readFile(`${edj.profileDir}${edj.lastFile}`, { encoding: 'UTF-8' }, (err, str) => {
-            if (err !== null) {
-            }
+          fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
+            encoding: 'UTF-8'
+          }, (err, str) => {
+            if (err !== null) {}
             if (typeof str !== 'undefined') {
               edj.fileOnLoad(str);
             }
@@ -79,7 +82,9 @@ edj = {
         }
       } else {
         const fs = require('fs');
-        fs.readFile(`${edj.profileDir}${edj.lastFile}`, { encoding: 'UTF-8' }, (err, str) => {
+        fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
+          encoding: 'UTF-8'
+        }, (err, str) => {
           if (err !== null) {
             console.log(err);
           }
@@ -88,7 +93,10 @@ edj = {
           }
         });
       }
-      setTimeout(async function() { _selDir = await edj.loadLogFiles(); edj.monitorChanges(_selDir); }, 1000);
+      setTimeout(async function () {
+        _selDir = await edj.loadLogFiles();
+        edj.monitorChanges(_selDir);
+      }, 1000);
     }
   },
   fileOnLoad(fileContent) {
@@ -127,12 +135,12 @@ edj = {
     return edj.selDir;
   },
   tailLogFile(fileName) {
-    if(fileName === 'null')
+    if (fileName === 'null')
       return;
-    if(fileName == edj.currentTail) {
+    if (fileName == edj.currentTail) {
       return;
     }
-    
+
     const Tail = require('tail').Tail;
     const logTail = new Tail(fileName);
 
@@ -140,15 +148,17 @@ edj = {
       edjLogparser.parseLogLine(line);
     });
 
-    logTail.on('error', error => { console.error(error);});
+    logTail.on('error', error => {
+      console.error(error);
+    });
     edj.currentTail = fileName;
-  }
+  },
 };
 
 (async function doneLoading() {
   document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);
   if (typeof process !== 'undefined' && edjApp.is_electron) {
-    let files = await edj.loadLogFiles();
+    const files = await edj.loadLogFiles();
     edj.monitorChanges(files);
   }
 }());

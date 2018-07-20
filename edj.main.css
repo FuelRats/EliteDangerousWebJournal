@@ -35,6 +35,17 @@ pre.code {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+input[type="url"] {
+  min-width: 600px;
+  background-color: rgb(223, 223, 223);
+  color: rgb(22, 22, 22);
+  border-radius: 10px;
+  border: 0;
+  padding: 10px;
+  font-family: Courier New, Courier, monospace;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 .directorySelection input[type="file"] {
   display: none;
 }
