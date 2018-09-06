@@ -12,6 +12,7 @@ const edjGui = {
     const playerPos = edjGui.get_cmdr_position();
     if (playerPos.length > 0) {
       document.getElementById('location').innerText = `in ${playerPos.join(', ')}`;
+      document.getElementById('body').innerText = `${edjdata.player.pos.Body} is ${edjdata.player.pos.DistanceToArrival} LS from the primary star.`;
     } else {
       document.getElementById('location').innerText = 'at an unknown position';
     }

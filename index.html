@@ -2,7 +2,6 @@
 <html>
 
 <head>
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self';" />
   <title>Elite Dangerous: Journal Reader</title>
   <link rel="stylesheet" type="text/css" href="edj.main.css?v=1.0.3" />
 </head>
@@ -32,9 +31,13 @@
   <div class="player-info">
     <span id="cmdrname">CMDR &lt;Load the journal&gt;</span>
     <span id="location">&lt;Load the journal&gt;</span>
+    <br>
+    <span id="body"></span>
+    <span id="bodyType"></span>
+    <p>Fuel Level:
     <div id="fuelLevel">
       <div id="fuelBar"></div>
-    </div>
+    </div></p>
     <div id="canSynthOxygen">
 
     </div>
@@ -44,6 +47,7 @@
   <script type="text/javascript" src="edj.utils.js?v=1.0.3"></script>
   <script type="text/javascript" src="edj.logparser.js?v=1.0.3"></script>
   <script type="text/javascript" src="edj.filereader.js?v=1.0.3"></script>
+  <script type="text/javascript" src="edj.getdistance.js"></script>
 </body>
 
 </html>

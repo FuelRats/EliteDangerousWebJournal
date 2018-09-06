@@ -37,6 +37,7 @@ edjdata = {
       Docked: true,
       Body: null,
       BodyType: null,
+      DistanceToArrival: 0,
       StarPos: null,
       Scoopable: null,
       Supercruise: null,

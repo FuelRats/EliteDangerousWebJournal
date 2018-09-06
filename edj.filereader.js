@@ -26,6 +26,7 @@ edj = {
       sel.removeAllRanges();
       sel.addRange(r2);
       document.execCommand('copy');
+      //todo: update on new file selection
     }
     t.contenteditable = false;
   },
@@ -49,6 +50,10 @@ edj = {
         edj.fileOnLoad(res.target.result);
       };
       fr.readAsText(edj.lastFile, 'UTF-8');
+      //one file uploaded, stop monitoring for changes.
+      if (_files.length === 1) {
+        return;
+      }
       setTimeout(() => {
         edj.monitorChanges(_selDir);
       }, 1000);
@@ -109,6 +114,8 @@ edj = {
       l++;
     }
     edj.lastLine = l;
+    // assuming parsing is done, go ahead and get the distance
+    edjGetdistance.request(edjdata.player.pos.Body);
     edjGui.updateGui();
   },
   isJson(line) {
