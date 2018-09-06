@@ -4,6 +4,7 @@
     "edjApp": true,
     "edjLogparser": true,
     "edScoopables": true,
+    "edjGetdistance": true,
     "edj": true,
     "console": false,
     "process": true,
