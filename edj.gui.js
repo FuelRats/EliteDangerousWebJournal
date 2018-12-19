@@ -24,7 +24,12 @@ const edjGui = {
       );
   },
   update_fuel_level() {
-    document.getElementById('fuelBar').style.width = `${(edjdata.player.fuel.current / edjdata.player.fuel.max) * 100}%`;
+    let fuelWidth = (edjdata.player.fuel.current / edjdata.player.fuel.max) * 100;
+    if (fuelWidth > 100) {
+      fuelWidth = 100;
+    }
+
+    document.getElementById('fuelBar').style.width = `${fuelWidth}%`;
   },
   get_cmdr_position() {
     const items = [];
