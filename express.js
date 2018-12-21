@@ -8,12 +8,19 @@ const serveStatic = require("serve-static");
 const session = require("express-session");
 var FileStore = require("session-file-store")(session);
 
+const { version } = require("./package.json");
+const revision = require("child_process")
+	.execSync("git rev-parse --short HEAD")
+	.toString()
+	.trim();
+
 const app = express();
 
 const CompanionApiClient = require("./companion-api-client").CompanionApiClient;
 
 app.set("etag", false);
 app.set("trust proxy", 1);
+app.set("view engine", "ejs");
 app.use(
 	session({
 		store: new FileStore({
@@ -28,7 +35,13 @@ app.use(
 
 const port = 8700;
 
-app.use(serveStatic("public", { index: ["index.html"] }));
+app.use(serveStatic("public"));
+
+app.get("/", (req, res) => {
+	res.render("index", {
+		version: `${version}-${revision}`
+	});
+});
 
 app.use((req, res, next) => {
 	res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
