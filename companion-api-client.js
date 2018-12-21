@@ -18,14 +18,11 @@ class CompanionApiClient {
 	}
 
 	async fetchData(endpoint) {
-		let result = await fetch(
-			`https://pts-companion.orerve.net/${endpoint}`,
-			{
-				headers: {
-					Authorization: `Bearer ${this.AccessToken}`
-				}
+		let result = await fetch(`https://companion.orerve.net/${endpoint}`, {
+			headers: {
+				Authorization: `Bearer ${this.AccessToken}`
 			}
-		).then(resp => resp.json());
+		}).then(resp => resp.json());
 
 		return result;
 	}
