@@ -80,8 +80,8 @@ if (edjApp.is_electron) {
 			// We don't see cargo, so we can't make that prediction.
 			edjdata.cansynthesizelifesupport = null;
 
-			edjdata.player.pos.StarSystem = result.ship.starsystem.name;
-			edjdata.player.pos.Body = result.ship.station.name;
+			edjdata.player.pos.StarSystem = result.lastSystem.name;
+			edjdata.player.pos.Body = result.lastStarport.name;
 			edjGui.updateGui();
 			positionInterval = setInterval(function() {
 				getUpdatedPosition();
