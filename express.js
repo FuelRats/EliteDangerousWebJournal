@@ -12,6 +12,7 @@ const app = express();
 
 const CompanionApiClient = require("./companion-api-client").CompanionApiClient;
 
+app.set("etag", false);
 app.set("trust proxy", 1);
 app.use(
 	session({
@@ -28,6 +29,11 @@ app.use(
 const port = 3000;
 
 app.use(serveStatic("public", { index: ["index.html"] }));
+
+app.use((req, res, next) => {
+	res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+	next();
+});
 
 function RandomState() {
 	return rand(20, "-journalreader");

@@ -66,7 +66,9 @@ if (edjApp.is_electron) {
 	});
 
 	async function checkIsLoggedIn() {
-		let result = await fetch("/fetchPosition").then(r => r.json());
+		let result = await fetch(
+			"/fetchPosition?_=" + new Date().getTime()
+		).then(r => r.json());
 		if (!!result.error && result.error) {
 			return;
 		} else {
@@ -90,7 +92,9 @@ if (edjApp.is_electron) {
 	}
 
 	async function getUpdatedPosition() {
-		let result = await fetch("/fetchPosition").then(r => r.json());
+		let result = await fetch(
+			"/fetchPosition?_=" + new Date().getTime()
+		).then(r => r.json());
 		if (!!result.error && result.error) {
 			clearInterval(positionInterval);
 			return;
