@@ -4,11 +4,7 @@
   "description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
   "main": "start.js",
   "scripts": {
-    "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps",
     "express": "node express.js",
     "express-dev": "nodemon express.js"
   },
@@ -23,21 +19,10 @@
   },
   "homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
   "devDependencies": {
-    "electron": "^2.0.0",
-    "electron-builder": "^20.13.3",
     "nodemon": "^1.18.9"
   },
-  "build": {
-    "appId": "com.fuelrats.elitedangerouswebjournal",
-    "productName": "Elite Dangerous: Journal Reader",
-    "win": {
-      "target": "portable"
-    },
-    "portable": {
-      "requestExecutionLevel": "user"
-    }
-  },
   "dependencies": {
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "serve-static": "^1.13.2",
     "tail": "^1.2.4"
