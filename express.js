@@ -53,8 +53,6 @@ function rand(length, current) {
 
 app.get("/frontierAuth", (req, res) => {
 	const randomState = RandomState();
-	console.log(req.baseUrl);
-
 	const redirectUrl = `${req.protocol}://${req.get("host")}/callback`;
 
 	res.redirect(
@@ -115,7 +113,6 @@ app.get("/fetchPosition", async (req, res) => {
 			req.session.frontierToken.access_token
 		);
 		let resp = await companionClient.FetchProfile();
-		console.log(JSON.stringify(resp));
 		res.json(resp);
 		return;
 	}
