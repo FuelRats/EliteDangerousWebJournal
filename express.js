@@ -6,6 +6,8 @@ require("isomorphic-fetch");
 const express = require("express");
 const serveStatic = require("serve-static");
 const session = require("express-session");
+var FileStore = require("session-file-store")(session);
+
 const app = express();
 
 const CompanionApiClient = require("./companion-api-client").CompanionApiClient;
@@ -13,7 +15,10 @@ const CompanionApiClient = require("./companion-api-client").CompanionApiClient;
 app.set("trust proxy", 1);
 app.use(
 	session({
-		secret: process.env.SESSION_SECRET,
+		store: new FileStore({
+			secret: process.env.SESSION_SECRET
+		}),
+		secret: process.env.COOKIE_SIGN_KEY,
 		cookie: { secure: undefined },
 		resave: false,
 		saveUninitialized: true
