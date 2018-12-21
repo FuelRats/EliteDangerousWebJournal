@@ -26,7 +26,7 @@ app.use(
 	})
 );
 
-const port = 3000;
+const port = 8700;
 
 app.use(serveStatic("public", { index: ["index.html"] }));
 
