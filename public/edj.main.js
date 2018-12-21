@@ -96,8 +96,8 @@ if (edjApp.is_electron) {
 			return;
 		} else {
 			edjdata.player.cmdr.Commander = result.commander.name;
-			edjdata.player.pos.StarSystem = result.ship.starsystem.name;
-			edjdata.player.pos.Body = result.ship.station.name;
+			edjdata.player.pos.StarSystem = result.lastSystem.name;
+			edjdata.player.pos.Body = result.lastStarport.name;
 			edjGui.updateGui();
 		}
 	}
