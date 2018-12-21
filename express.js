@@ -109,6 +109,7 @@ app.get("/fetchPosition", async (req, res) => {
 			req.session.frontierToken.access_token
 		);
 		let resp = await companionClient.FetchProfile();
+		console.log(JSON.stringify(resp));
 		res.json(resp);
 		return;
 	}
