@@ -1,12 +1,12 @@
-# So you wanna help out with the RatTracker?
+# So you wanna help out with the Journal Reader?
 
 I love it!
 
 But, truth be told is that we're not currently looking for help with the actual code of this project. What we need is people with eye for UX, and feature-requests.
 
-## How you can contribute to the RatTracker
+## How you can contribute to the Journal Reader
 
-You can fire your suggestion-limpets towards our [JIRA project](https://jira.fuelrats.com/projects/RTE/), where we keep track of all bugs, requests and suggestions!
+You can fire your suggestion-limpets towards our [JIRA project](https://jira.fuelrats.com/projects/EDJR/), where we keep track of all bugs, requests and suggestions!
 
 Be sure to write as detailed as possible, so it's easier for us to work with these tickets.
 
