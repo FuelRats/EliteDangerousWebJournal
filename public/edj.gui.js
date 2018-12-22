@@ -28,6 +28,20 @@ const edjGui = {
 			).innerHTML = edjdata.cansynthesizelifesupport
 				? "You can synthesize at least one full life-support refill"
 				: "You do not have enough iron or nickel to manufacture a full life-support refill";
+		} else if (edjdata.canopyBreached != null) {
+			let strings = [];
+			if (edjdata.canopyBreached) strings.push("Canopy is breached!");
+			else strings.push("Canopy is not breached!");
+			if (edjdata.oxygenRemaining != null) {
+				strings.push(
+					"Oxygen remaining: " +
+						edjdata.oxygenRemaining / 1000 +
+						" seconds"
+				);
+			}
+			document.getElementById("canSynthOxygen").innerHTML = strings.join(
+				"<br />"
+			);
 		}
 	},
 	update_fuel_level() {

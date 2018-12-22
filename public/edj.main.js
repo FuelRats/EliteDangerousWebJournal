@@ -51,7 +51,9 @@ edjdata = {
 		}
 	},
 	gamemode: null,
-	cansynthesizelifesupport: false
+	cansynthesizelifesupport: false,
+	canopyBreached: null,
+	oxygenRemaining: null
 };
 
 positionInterval = null;
@@ -72,19 +74,7 @@ if (edjApp.is_electron) {
 		if (!!result.error && result.error) {
 			return;
 		} else {
-			if (edjdata.player.cmdr == null) {
-				edjdata.player.cmdr = {
-					Commander: result.commander.name,
-					...result.commander
-				};
-			}
-
-			// We don't see cargo, so we can't make that prediction.
-			edjdata.cansynthesizelifesupport = null;
-
-			edjdata.player.pos.StarSystem = result.lastSystem.name;
-			edjdata.player.pos.Body = result.lastStarport.name;
-			edjGui.updateGui();
+			_CAPIUpdateData(result);
 			positionInterval = setInterval(function() {
 				getUpdatedPosition();
 			}, 30000);
@@ -99,11 +89,28 @@ if (edjApp.is_electron) {
 			clearInterval(positionInterval);
 			return;
 		} else {
-			edjdata.player.cmdr.Commander = result.commander.name;
-			edjdata.player.pos.StarSystem = result.lastSystem.name;
-			edjdata.player.pos.Body = result.lastStarport.name;
-			edjGui.updateGui();
+			_CAPIUpdateData(result);
 		}
+	}
+
+	function _CAPIUpdateData(result) {
+		if (edjdata.player.cmdr == null) {
+			edjdata.player.cmdr = {
+				Commander: result.commander.name,
+				...result.commander
+			};
+		}
+
+		// We don't see cargo, so we can't make that prediction.
+		edjdata.cansynthesizelifesupport = null;
+
+		edjdata.player.pos.StarSystem = result.lastSystem.name;
+		edjdata.player.pos.Body = result.lastStarport.name;
+
+		edjdata.canopyBreached = result.ship.cockpitBreached;
+		edjdata.oxygenRemaining = result.ship.oxygenRemaining;
+
+		edjGui.updateGui();
 	}
 
 	checkIsLoggedIn();
