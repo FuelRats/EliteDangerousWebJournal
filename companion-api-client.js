@@ -22,7 +22,12 @@ class CompanionApiClient {
 			headers: {
 				Authorization: `Bearer ${this.AccessToken}`
 			}
-		}).then(resp => resp.json());
+		})
+			.then(resp => resp.json())
+			.catch(err => {
+				console.error(err);
+				return { error: true, message: err };
+			});
 
 		return result;
 	}

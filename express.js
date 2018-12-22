@@ -100,7 +100,7 @@ app.get("/callback", async (req, res, next) => {
 	})
 		.then(function(response) {
 			if (response.status == 200) return response.json();
-			res.json(res.json());
+			res.json(response);
 			return;
 		})
 		.then(function(blob) {
@@ -113,6 +113,16 @@ app.get("/callback", async (req, res, next) => {
 	}
 
 	req.session.frontierToken = result;
+
+	let userProfile = await fetch("https://auth.frontierstore.net/me", {
+		headers: {
+			Authorization: `Bearer ${result.access_token}`
+		}
+	})
+		.then(resp => resp.json())
+		.catch(err => console.error(err));
+	console.debug(userProfile);
+
 	req.session.save(err => {
 		console.log(err);
 	});
