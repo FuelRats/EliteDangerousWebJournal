@@ -6,5 +6,12 @@ Only problem is that with JavaScript, I cannot monitor a folder and see if there
 
 ## Contributions
 
-If you want to contribute, you can read our [CONTRIBUTION.md](CONTRIBUTING.md).
+If you want to contribute, you can read our [CONTRIBUTING.md](CONTRIBUTING.md).
 Not looking for code contributions, but bug reports and feature requests or suggestions. :)
+
+## Special Thanks
+
+The Fuel Rats is powered by user data from:
+
+-   [EDSM](https://www.edsm.net/)
+-   [Frontier Developments](https://www.elitedangerous.com/)
