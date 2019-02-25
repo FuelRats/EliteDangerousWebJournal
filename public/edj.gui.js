@@ -4,6 +4,7 @@ const edjGui = {
 		edjGui.write_cmdr_position();
 		edjGui.can_synthesize_lifesupport();
 		edjGui.update_fuel_level();
+		edjGui.irc_friendly_text();
 	},
 	write_cmdr_position() {
 		if (edjdata.player.cmdr != null) {
@@ -24,10 +25,10 @@ const edjGui = {
 	can_synthesize_lifesupport() {
 		if (edjdata.cansynthesizelifesupport != null) {
 			document.getElementById(
-				"canSynthOxygen"
-			).innerHTML = edjdata.cansynthesizelifesupport
-				? "You can synthesize at least one full life-support refill"
-				: "You do not have enough iron or nickel to manufacture a full life-support refill";
+					"canSynthOxygen"
+				).innerHTML = edjdata.cansynthesizelifesupport ?
+				"You can synthesize at least one full life-support refill" :
+				"You do not have enough iron or nickel to manufacture a full life-support refill";
 		} else if (edjdata.canopyBreached != null) {
 			let strings = [];
 			if (edjdata.canopyBreached) strings.push("Canopy is breached!");
@@ -35,8 +36,8 @@ const edjGui = {
 			if (edjdata.oxygenRemaining != null) {
 				strings.push(
 					"Oxygen remaining: " +
-						edjdata.oxygenRemaining / 1000 +
-						" seconds"
+					edjdata.oxygenRemaining / 1000 +
+					" seconds"
 				);
 			}
 			document.getElementById("canSynthOxygen").innerHTML = strings.join(
@@ -70,5 +71,8 @@ const edjGui = {
 		}
 
 		return items;
+	},
+	irc_friendly_text() {
+		document.querySelector('.irc-friendly').innerText = `CMDR ${edjdata.player.cmdr.Commander} [${edjdata.player.platform}] in ${this.get_cmdr_position().join(", ")}`;
 	}
 };

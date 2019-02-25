@@ -74,11 +74,19 @@ if (edjApp.is_electron) {
 		if (!!result.error && result.error) {
 			return;
 		} else {
+			edjdata.player.platform = await getPlatform();
 			_CAPIUpdateData(result);
-			positionInterval = setInterval(function() {
+
+			positionInterval = setInterval(function () {
 				getUpdatedPosition();
+
 			}, 30000);
 		}
+	}
+
+	async function getPlatform() {
+		let result = await fetch('/getPlatform?_=' + new Date().getTime()).then(r => r.json());
+		return result;
 	}
 
 	async function getUpdatedPosition() {

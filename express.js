@@ -1,14 +1,16 @@
 require("dotenv").config();
-var URLSearchParams = require("url").URLSearchParams;
+const URLSearchParams = require("url").URLSearchParams;
 require("es6-promise").polyfill();
 require("isomorphic-fetch");
 
 const express = require("express");
 const serveStatic = require("serve-static");
 const session = require("express-session");
-var FileStore = require("session-file-store")(session);
+const MemoryStore = require("memorystore")(session);
 
-const { version } = require("./package.json");
+const {
+	version
+} = require("./package.json");
 const revision = require("child_process")
 	.execSync("git rev-parse --short HEAD")
 	.toString()
@@ -23,11 +25,13 @@ app.set("trust proxy", 1);
 app.set("view engine", "ejs");
 app.use(
 	session({
-		store: new FileStore({
+		store: new MemoryStore({
 			secret: process.env.SESSION_SECRET
 		}),
 		secret: process.env.COOKIE_SIGN_KEY,
-		cookie: { secure: undefined },
+		cookie: {
+			secure: undefined
+		},
 		resave: false,
 		saveUninitialized: true
 	})
@@ -54,14 +58,14 @@ function RandomState() {
 
 function rand(length, current) {
 	current = current ? current : "";
-	return length
-		? rand(
-				--length,
-				"0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".charAt(
-					Math.floor(Math.random() * 60)
-				) + current
-		  )
-		: current;
+	return length ?
+		rand(
+			--length,
+			"0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".charAt(
+				Math.floor(Math.random() * 60)
+			) + current
+		) :
+		current;
 }
 
 app.get("/frontierAuth", (req, res) => {
@@ -92,18 +96,18 @@ app.get("/callback", async (req, res, next) => {
 	);
 
 	let result = await fetch("https://auth.frontierstore.net/token", {
-		method: "POST",
-		body: dataParams,
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded"
-		}
-	})
-		.then(function(response) {
+			method: "POST",
+			body: dataParams,
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded"
+			}
+		})
+		.then(function (response) {
 			if (response.status == 200) return response.json();
 			res.json(response);
 			return;
 		})
-		.then(function(blob) {
+		.then(function (blob) {
 			return blob;
 		});
 
@@ -115,13 +119,13 @@ app.get("/callback", async (req, res, next) => {
 	req.session.frontierToken = result;
 
 	let userProfile = await fetch("https://auth.frontierstore.net/me", {
-		headers: {
-			Authorization: `Bearer ${result.access_token}`
-		}
-	})
+			headers: {
+				Authorization: `Bearer ${result.access_token}`
+			}
+		})
 		.then(resp => resp.json())
 		.catch(err => console.error(err));
-	console.debug(userProfile);
+	req.session.userProfile = userProfile;
 
 	req.session.save(err => {
 		console.log(err);
@@ -129,6 +133,51 @@ app.get("/callback", async (req, res, next) => {
 
 	res.redirect("/");
 });
+
+app.get("/getPlatform", async (req, res) => {
+	if (!!req.session.userProfile) {
+
+		let platform = 'unknown';
+
+		let profile = req.session.userProfile;
+
+		console.log(profile);
+
+		if (profile.allowedDownloads.length === 0) {
+			res.json('none');
+			return;
+		}
+
+		if (!profile.platform) {
+			if (!!profile.firstname && profile.firstname === 'Playstation 4') {
+				platorm = 'PS4';
+			}
+			res.json(platform);
+			return;
+		}
+
+		switch (profile.platform) {
+			case 'xbox':
+				platform = 'XB';
+				break;
+			case 'steam':
+			case 'frontier':
+				platform = 'PC';
+				break;
+			case 'psn':
+				platform = 'PS4';
+				break;
+		}
+
+		res.json(platform);
+		return;
+	}
+
+	res.json({
+		message: "Not logged in",
+		error: true
+	});
+})
 
 app.get("/fetchPosition", async (req, res) => {
 	if (!!req.session.frontierToken) {
@@ -139,7 +188,10 @@ app.get("/fetchPosition", async (req, res) => {
 		res.json(resp);
 		return;
 	}
-	res.json({ message: "Not logged in", error: true });
+	res.json({
+		message: "Not logged in",
+		error: true
+	});
 });
 
 app.listen(port);
