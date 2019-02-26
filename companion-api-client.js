@@ -1,36 +1,45 @@
-"use strict";
+/* global module */
+'use strict'
 
 class CompanionApiClient {
-	constructor(access_token) {
-		this.AccessToken = access_token;
-	}
+  constructor (accessToken) {
+    this.AccessToken = accessToken
+  }
 
-	async FetchProfile() {
-		return await this.fetchData("profile");
-	}
+  async fetchProfile () {
+    const profile = await this.fetchData('profile')
+    return profile
+  }
 
-	async FetchMarket() {
-		return await this.fetchData("market");
-	}
+  async fetchMarket () {
+    const market = await this.fetchData('market')
+    return market
+  }
 
-	async FetchShipyard() {
-		return await this.fetchData("shipyard");
-	}
+  async fetchShipyard () {
+    const shipyard = await this.fetchData('shipyard')
+    return shipyard
+  }
 
-	async fetchData(endpoint) {
-		let result = await fetch(`https://companion.orerve.net/${endpoint}`, {
-			headers: {
-				Authorization: `Bearer ${this.AccessToken}`
-			}
-		})
-			.then(resp => resp.json())
-			.catch(err => {
-				console.error(err);
-				return { error: true, message: err };
-			});
+  async fetchData (endpoint) {
+    const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${this.AccessToken}`,
+      },
+    })
+      .then((resp) => resp.json())
+      .catch((err) => {
+        console.error(err)
+        return {
+          error: true,
+          message: err,
+        }
+      })
 
-		return result;
-	}
+    return result
+  }
 }
 
-module.exports = { CompanionApiClient };
+module.exports = {
+  CompanionApiClient,
+}
