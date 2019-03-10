@@ -1,6 +1,6 @@
 {
 	"name": "elite-dangerous-webjournalreader",
-	"version": "1.0.11",
+	"version": "1.0.12",
 	"description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
 	"main": "start.js",
 	"scripts": {
