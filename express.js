@@ -1,4 +1,5 @@
 /* global require */
+'use strict'
 
 require('dotenv').config()
 const {

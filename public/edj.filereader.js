@@ -1,4 +1,6 @@
 /* globals document, window, FileReader, setTimeout, edjLogparser, edjGui, require */
+'use strict'
+
 edj = {
   profileDir: null,
   selDir: null,

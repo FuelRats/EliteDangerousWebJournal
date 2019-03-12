@@ -1,4 +1,6 @@
 /* globals document, edjdata */
+'use strict'
+
 const edjGui = {
   updateGui () {
     edjGui.writeCmdrPosition()

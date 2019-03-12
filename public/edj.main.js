@@ -1,4 +1,6 @@
 /* global edjGui */
+'use strict'
+
 edjdata = {
   player: {
     cmdr: null,

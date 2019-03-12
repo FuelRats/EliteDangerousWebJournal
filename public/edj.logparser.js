@@ -1,3 +1,5 @@
+'use strict'
+
 edjLogparser = {
   parseLogLine (line) {
     if (edj.isJson(line)) {
