@@ -1,7 +1,7 @@
 /* global edjGui */
 'use strict'
 
-edjdata = {
+const edjdata = {
   player: {
     cmdr: null,
     rank: {
@@ -61,12 +61,12 @@ document.querySelector('.winpathButton').addEventListener('click', () => {
   edj.copyFilePath('#winpath')
 })
 
-const getPlatform = async function getPlatform () {
+const getPlatform = async function getPlatform() {
   const result = await fetch(`/getPlatform?_=${new Date().getTime()}`).then((resp) => resp.json())
   return result
 }
 
-const _CAPIUpdateData = function _CAPIUpdateData (result) {
+const _CAPIUpdateData = function _CAPIUpdateData(result) {
   if (edjdata.player.cmdr === null) {
     edjdata.player.cmdr = {
       Commander: result.commander.name,
@@ -86,7 +86,7 @@ const _CAPIUpdateData = function _CAPIUpdateData (result) {
   edjGui.updateGui()
 }
 
-const getUpdatedPosition = async function getUpdatedPosition () {
+const getUpdatedPosition = async function getUpdatedPosition() {
   const result = await fetch(
     `/fetchPosition?_=${new Date().getTime()}`
   ).then((resp) => resp.json())
@@ -99,7 +99,7 @@ const getUpdatedPosition = async function getUpdatedPosition () {
 
 const positionUpdateInterval = 30000
 
-const checkIsLoggedIn = async function checkIsLoggedIn () {
+const checkIsLoggedIn = async function checkIsLoggedIn() {
   const result = await fetch(
     `/fetchPosition?_=${new Date().getTime()}`
   ).then((resp) => resp.json())

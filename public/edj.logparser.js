@@ -1,7 +1,7 @@
 'use strict'
 
-edjLogparser = {
-  parseLogLine (line) {
+const edjLogparser = {
+  parseLogLine(line) {
     if (edj.isJson(line)) {
       const logItem = JSON.parse(line)
 
