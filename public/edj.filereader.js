@@ -1,164 +1,143 @@
-/* globals document, window, FileReader, setTimeout, edjLogparser, edjGui */
+/* globals document, window, FileReader, setTimeout, edjLogparser, edjGui, require */
+'use strict'
+
 edj = {
   profileDir: null,
   selDir: null,
   lastFile: null,
   lastLine: 0,
   currentTail: null,
-  checkFiles(evt) {
-    edj.selDir = evt.target.files;
-    edj.monitorChanges(edj.selDir);
+  checkFiles (evt) {
+    edj.selDir = evt.target.files
+    edj.monitorChanges(edj.selDir)
   },
-  copyFilePath(selector) {
-    const t = document.querySelector(selector);
-    t.contenteditable = true;
+  copyFilePath (selector) {
+    const target = document.querySelector(selector)
+    target.contenteditable = true
     if (document.body.createTextRange) {
-      const r = document.body.createTextRange();
-      r.moveToElementText(t);
-      r.select();
-      r.execCommand('Copy');
-      r.moveToElementText(null);
-      r.select();
+      const range = document.body.createTextRange()
+      range.moveToElementText(target)
+      range.select()
+      range.execCommand('Copy')
+      range.moveToElementText(null)
+      range.select()
     } else if (window.getSelection && document.createRange) {
-      const r2 = document.createRange();
-      r2.selectNodeContents(t);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(r2);
-      document.execCommand('copy');
+      const r2 = document.createRange()
+      r2.selectNodeContents(target)
+      const sel = window.getSelection()
+      sel.removeAllRanges()
+      sel.addRange(r2)
+      document.execCommand('copy')
     }
-    t.contenteditable = false;
+    target.contenteditable = false
   },
-  async monitorChanges(_selDir) {
-    if (_selDir === null)
-      return;
+  monitorChanges (_selDir) {
+    if (_selDir === null) {
+      return
+    }
     if (_selDir.toString() === '[object FileList]') {
-      const _files = _selDir;
-      const _fileCount = _files.length;
-      let i = 0;
-      while (i < _fileCount) {
-        if (_files[i].name.match(/Journal\.\d+\.\d+\.log/gi)) {
-          if (edj.lastFile === null || _files[i].lastModified > edj.lastFile.lastModified) {
-            edj.lastFile = _files[i];
+      const _files = _selDir
+      const _fileCount = _files.length
+      let ix = 0
+      while (ix < _fileCount) {
+        if (_files[ix].name.match(/Journal\.\d+\.\d+\.log/gui)) {
+          if (edj.lastFile === null || _files[ix].lastModified > edj.lastFile.lastModified) {
+            edj.lastFile = _files[ix]
           }
         }
-        i++;
+        ix += 1
       }
-      const fr = new FileReader();
+      const fr = new FileReader()
       fr.onload = (res) => {
-        edj.fileOnLoad(res.target.result);
-      };
-      fr.readAsText(edj.lastFile, 'UTF-8');
+        edj.fileOnLoad(res.target.result)
+      }
+      fr.readAsText(edj.lastFile, 'UTF-8')
       setTimeout(() => {
-        edj.monitorChanges(_selDir);
-      }, 1000);
+        edj.monitorChanges(_selDir)
+      }, 1000)
     } else {
-      const _files = _selDir;
-      const _fileCount = _files.length;
-      let i = 0;
-      while (i < _fileCount) {
-        if (_files[i].match(/Journal\.\d+\.\d+\.log/gi)) {
-          if (edj.lastFile === null || _files[i] !== edj.lastFile) {
-            edj.lastFile = _files[i];
+      const _files = _selDir
+      const _fileCount = _files.length
+      let ix = 0
+      while (ix < _fileCount) {
+        if (_files[ix].match(/Journal\.\d+\.\d+\.log/gui)) {
+          if (edj.lastFile === null || _files[ix] !== edj.lastFile) {
+            edj.lastFile = _files[ix]
           }
         }
-        i++;
+        ix += 1
       }
-      if (typeof process !== 'undefined' && edjApp.is_electron) {
-        if (edj.lastFile !== null) {
 
-          // Read the contents for an existing file, then tail it.
-          const fs = require('fs');
-          fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
-            encoding: 'UTF-8'
-          }, (err, str) => {
-            if (err !== null) {}
-            if (typeof str !== 'undefined') {
-              edj.fileOnLoad(str);
-            }
-          });
-
-          edj.tailLogFile(`${edj.profileDir}${edj.lastFile}`);
+      const fs = require('fs')
+      fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
+        encoding: 'UTF-8',
+      }, (err, str) => {
+        if (err !== null) {
+          console.log(err)
         }
-      } else {
-        const fs = require('fs');
-        fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
-          encoding: 'UTF-8'
-        }, (err, str) => {
-          if (err !== null) {
-            console.log(err);
-          }
-          if (typeof str !== 'undefined') {
-            edj.fileOnLoad(str);
-          }
-        });
-      }
-      setTimeout(async function () {
-        _selDir = await edj.loadLogFiles();
-        edj.monitorChanges(_selDir);
-      }, 1000);
+        if (typeof str !== 'undefined') {
+          edj.fileOnLoad(str)
+        }
+      })
+
+      setTimeout(async () => {
+        const tailFiles = await edj.loadLogFiles()
+        edj.monitorChanges(tailFiles)
+      }, 1000)
     }
   },
-  fileOnLoad(fileContent) {
-    const lines = fileContent.split('\n');
-    let l = edj.lastLine;
-    while (l < lines.length) {
-      if (edj.lastLine !== lines[l]) {
-        edjLogparser.parseLogLine(lines[l]);
+  fileOnLoad (fileContent) {
+    const lines = fileContent.split('\n')
+    let lineNumber = edj.lastLine
+    while (lineNumber < lines.length) {
+      if (edj.lastLine !== lines[lineNumber]) {
+        edjLogparser.parseLogLine(lines[lineNumber])
       }
-      l++;
+      lineNumber += 1
     }
-    edj.lastLine = l;
-    edjGui.updateGui();
+    edj.lastLine = lineNumber
+    edjGui.updateGui()
   },
-  isJson(line) {
+  isJson (line) {
     try {
-      JSON.parse(line);
-    } catch (e) {
-      return false;
+      JSON.parse(line)
+    } catch (ex) {
+      return false
     }
 
-    return true;
+    return true
   },
-  async loadLogFiles() {
-    if (typeof process !== 'undefined' && edjApp.is_electron) {
-
-      const fs = require('fs');
-      if (edjApp.is_windows) {
-        const userProfile = (typeof process.env.HOME !== 'undefined' ? process.env.HOME : process.env.USERPROFILE);
-        const journalFolder = `${userProfile}\\Saved Games\\Frontier Developments\\Elite Dangerous\\`;
-        edj.profileDir = journalFolder;
-        edj.selDir = fs.readdirSync(journalFolder);
-      }
-    }
-
-    return edj.selDir;
+  loadLogFiles () {
+    return edj.selDir
   },
-  tailLogFile(fileName) {
-    if (fileName === 'null')
-      return;
-    if (fileName == edj.currentTail) {
-      return;
+  tailLogFile (fileName) {
+    if (fileName === 'null') {
+      return
+    }
+    if (fileName === edj.currentTail) {
+      return
     }
 
-    const Tail = require('tail').Tail;
-    const logTail = new Tail(fileName);
+    const {
+      Tail,
+    } = require('tail')
+    const logTail = new Tail(fileName)
 
-    logTail.on('line', line => {
-      edjLogparser.parseLogLine(line);
-    });
+    logTail.on('line', (line) => {
+      edjLogparser.parseLogLine(line)
+    })
 
-    logTail.on('error', error => {
-      console.error(error);
-    });
-    edj.currentTail = fileName;
+    logTail.on('error', (error) => {
+      console.error(error)
+    })
+    edj.currentTail = fileName
   },
 };
 
-(async function doneLoading() {
-  document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);
+(async function doneLoading () {
+  document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false)
   if (typeof process !== 'undefined' && edjApp.is_electron) {
-    const files = await edj.loadLogFiles();
-    edj.monitorChanges(files);
+    const files = await edj.loadLogFiles()
+    edj.monitorChanges(files)
   }
-}());
+})()

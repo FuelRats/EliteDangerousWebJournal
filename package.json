@@ -1,6 +1,6 @@
 {
 	"name": "elite-dangerous-webjournalreader",
-	"version": "1.0.11",
+	"version": "1.0.12",
 	"description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
 	"main": "start.js",
 	"scripts": {
@@ -22,15 +22,21 @@
 		"nodemon": "^1.18.9"
 	},
 	"dependencies": {
+		"@fuelrats/eslint-config": "^0.10.2",
+		"babel-eslint": "^10.0.1",
 		"dotenv": "^6.2.0",
 		"ejs": "^2.6.1",
 		"es6-promise": "^4.2.5",
+		"eslint": "^5.14.1",
+		"eslint-plugin-babel": "^5.3.0",
+		"eslint-plugin-import": "^2.16.0",
 		"express": "^4.16.4",
 		"express-session": "^1.15.6",
 		"form-data": "^2.3.3",
+		"graceful-fs": "4.1.10",
 		"isomorphic-fetch": "^2.2.1",
+		"memorystore": "^1.6.0",
 		"serve-static": "^1.13.2",
-		"session-file-store": "^1.2.0",
 		"tail": "^2.0.2"
 	}
 }
