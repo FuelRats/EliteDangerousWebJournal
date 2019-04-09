@@ -78,7 +78,9 @@ const _CAPIUpdateData = function _CAPIUpdateData(result) {
   edjdata.cansynthesizelifesupport = null
 
   edjdata.player.pos.StarSystem = result.lastSystem.name
-  edjdata.player.pos.Body = result.lastStarport.name
+  
+  // Ignoring this for now, since it gives false positives if you travel in the same system after undocking
+  // edjdata.player.pos.Body = result.lastStarport.name 
 
   edjdata.canopyBreached = result.ship.cockpitBreached
   edjdata.oxygenRemaining = result.ship.oxygenRemaining
