@@ -7,11 +7,11 @@ const edj = {
   lastFile: null,
   lastLine: 0,
   currentTail: null,
-  checkFiles(evt) {
+  checkFiles (evt) {
     edj.selDir = evt.target.files
     edj.monitorChanges(edj.selDir)
   },
-  copyFilePath(selector) {
+  copyFilePath (selector) {
     const target = document.querySelector(selector)
     target.contenteditable = true
     if (document.body.createTextRange) {
@@ -31,7 +31,7 @@ const edj = {
     }
     target.contenteditable = false
   },
-  monitorChanges(_selDir) {
+  monitorChanges (_selDir) {
     if (_selDir === null) {
       return
     }
@@ -86,7 +86,7 @@ const edj = {
       }, 1000)
     }
   },
-  fileOnLoad(fileContent) {
+  fileOnLoad (fileContent) {
     const lines = fileContent.split('\n')
     let lineNumber = edj.lastLine
     while (lineNumber < lines.length) {
@@ -98,7 +98,7 @@ const edj = {
     edj.lastLine = lineNumber
     edjGui.updateGui()
   },
-  isJson(line) {
+  isJson (line) {
     try {
       JSON.parse(line)
     } catch (ex) {
@@ -107,10 +107,10 @@ const edj = {
 
     return true
   },
-  loadLogFiles() {
+  loadLogFiles () {
     return edj.selDir
   },
-  tailLogFile(fileName) {
+  tailLogFile (fileName) {
     if (fileName === 'null') {
       return
     }
@@ -132,12 +132,14 @@ const edj = {
     })
     edj.currentTail = fileName
   },
-};
+}
 
-(async function doneLoading() {
+/*
+(async function doneLoading () {
   document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false)
   if (typeof process !== 'undefined' && edjApp.is_electron) {
     const files = await edj.loadLogFiles()
     edj.monitorChanges(files)
   }
 })()
+*/
