@@ -119,7 +119,7 @@ app.get('/callback', async (req, res) => {
       if (response.status === httpStatusSuccess) {
         return response.json()
       }
-      res.json(response)
+      return res.json(response)
     })
     .then((blob) => blob)
 
@@ -198,6 +198,23 @@ app.get('/fetchPosition', async (req, res) => {
     )
     const resp = await companionClient.fetchProfile()
     res.json(resp)
+    return
+  }
+  res.json({
+    message: 'Not logged in',
+    error: true,
+  })
+})
+
+app.get('/fetchJournal', async (req, res) => {
+  if (req.session.userProfile) {
+    const companionClient = new CompanionApiClient(
+      req.session.frontierToken.access_token
+    )
+    const resp = await companionClient.fetchTodaysJournal()
+    res.json({
+      journal: resp,
+    })
     return
   }
   res.json({
