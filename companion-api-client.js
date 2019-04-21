@@ -2,36 +2,54 @@
 'use strict'
 
 class CompanionApiClient {
-  constructor(accessToken) {
+  constructor (accessToken) {
     this.AccessToken = accessToken
   }
 
-  async fetchProfile() {
+  async fetchProfile () {
     const profile = await this.fetchData('profile')
     return profile
   }
 
-  async fetchMarket() {
+  async fetchMarket () {
     const market = await this.fetchData('market')
     return market
   }
 
-  async fetchShipyard() {
+  async fetchShipyard () {
     const shipyard = await this.fetchData('shipyard')
     return shipyard
   }
 
-  async fetchTodaysJournal() {
-    const journal = await this.fetchData('journal');
-    return journal;
+  async fetchTodaysJournal () {
+    const journal = await this.fetchDataAsText('journal')
+    return journal
   }
 
-  async fetchData(endpoint) {
+  async fetchDataAsText (endpoint) {
     const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
-        headers: {
-          Authorization: `Bearer ${this.AccessToken}`,
-        },
+      headers: {
+        Authorization: `Bearer ${this.AccessToken}`,
+      },
+    })
+      .then((resp) => resp.text())
+      .catch((err) => {
+        console.error(err)
+        return {
+          error: true,
+          message: err,
+        }
       })
+
+    return result
+  }
+
+  async fetchData (endpoint) {
+    const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${this.AccessToken}`,
+      },
+    })
       .then((resp) => resp.json())
       .catch((err) => {
         console.error(err)
