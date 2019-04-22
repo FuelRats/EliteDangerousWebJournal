@@ -76,9 +76,9 @@ const _CAPIUpdateData = function _CAPIUpdateData (result) {
   }
 
   // We don't see cargo, so we can't make that prediction.
-  edjdata.cansynthesizelifesupport = null
+  // edjdata.cansynthesizelifesupport = null
 
-  // edjdata.player.pos.StarSystem = result.lastSystem.name
+  edjdata.player.pos.StarSystem = result.lastSystem.name
 
   // Ignoring this for now, since it gives false positives if you travel in the same system after undocking
   // edjdata.player.pos.Body = result.lastStarport.name
@@ -95,7 +95,7 @@ const getPlayerJournal = async function getPlayerJournal () {
     return
   }
 
-  edj.fileOnLoad(result.journal)
+  edj.fileOnLoad(result.journal.result)
 }
 
 const getUpdatedPosition = async function getUpdatedPosition () {

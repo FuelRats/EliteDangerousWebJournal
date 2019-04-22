@@ -23,16 +23,29 @@ class CompanionApiClient {
 
   async fetchTodaysJournal () {
     const journal = await this.fetchDataAsText('journal')
+    if (!journal.completeResult) {
+      const antiHammerInterval = 5000
+      await new Promise((resolve) => setTimeout(resolve, antiHammerInterval))
+      return this.fetchTodaysJournal()
+    }
+
     return journal
   }
 
   async fetchDataAsText (endpoint) {
+    const httpOkStatus = 200
+    let completeResult = false
     const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
       headers: {
         Authorization: `Bearer ${this.AccessToken}`,
       },
     })
-      .then((resp) => resp.text())
+      .then((resp) => {
+        if (resp.status === httpOkStatus) {
+          completeResult = true
+        }
+        return resp.text()
+      })
       .catch((err) => {
         console.error(err)
         return {
@@ -41,7 +54,10 @@ class CompanionApiClient {
         }
       })
 
-    return result
+    return {
+      completeResult,
+      result,
+    }
   }
 
   async fetchData (endpoint) {
