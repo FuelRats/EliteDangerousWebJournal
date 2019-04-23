@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"express": "node express.js",
-		"express-dev": "nodemon express.js"
+		"express-dev": "nodemon express.js",
+		"build": "./node_modules/.bin/babel src -d public"
 	},
 	"repository": {
 		"type": "git",
@@ -19,6 +20,10 @@
 	},
 	"homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
 	"devDependencies": {
+		"@babel/cli": "^7.4.3",
+		"@babel/core": "^7.4.3",
+		"@babel/plugin-proposal-object-rest-spread": "^7.4.3",
+		"@babel/preset-env": "^7.4.3",
 		"nodemon": "^1.18.9"
 	},
 	"dependencies": {
