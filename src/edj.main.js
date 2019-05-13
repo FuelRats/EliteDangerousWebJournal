@@ -1,6 +1,21 @@
 /* global edjGui */
 'use strict'
 
+// eslint-disable-next-line no-var
+var windowIsActive = true
+
+window.addEventListener('blur', function setWindowAsBlurred () {
+  windowIsActive = false
+})
+window.addEventListener('focus', function setWindowAsFocused () {
+  windowIsActive = true
+})
+
+const isWindowActive = function isWindowActive () {
+  const isHidden = document.visibilityState === 'hidden'
+  return isHidden || windowIsActive
+}
+
 const edjdata = {
   player: {
     cmdr: null,
@@ -56,11 +71,11 @@ const edjdata = {
 
 let positionInterval = null
 
-/*
+
 document.querySelector('.winpathButton').addEventListener('click', () => {
   edj.copyFilePath('#winpath')
 })
-*/
+
 
 const getPlatform = async function getPlatform () {
   const result = await fetch(`/getPlatform?_=${new Date().getTime()}`).then((resp) => resp.json())
@@ -90,43 +105,50 @@ const _CAPIUpdateData = function _CAPIUpdateData (result) {
 }
 
 const getPlayerJournal = async function getPlayerJournal () {
-  const result = await fetch(`/fetchJournal?_=${new Date().getTime()}`).then((resp) => resp.json())
-  if (Boolean(result.error) && result.error) {
-    return
-  }
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchJournal?_=${new Date().getTime()}`).then((resp) => resp.json())
+    if (Boolean(result.error) && result.error) {
+      return
+    }
 
-  edj.fileOnLoad(result.journal.result)
+    edj.fileOnLoad(result.journal.result)
+  }
 }
 
 const getUpdatedPosition = async function getUpdatedPosition () {
-  const result = await fetch(
-    `/fetchPosition?_=${new Date().getTime()}`
-  ).then((resp) => resp.json())
-  if (Boolean(result.error) && result.error) {
-    clearInterval(positionInterval)
-    return
+  if (isWindowActive()) {
+    const result = await fetch(
+      `/fetchPosition?_=${new Date().getTime()}`
+    ).then((resp) => resp.json())
+    if (Boolean(result.error) && result.error) {
+      clearInterval(positionInterval)
+      return
+    }
+    _CAPIUpdateData(result)
+    await getPlayerJournal()
+    console.log(new Date())
   }
-  _CAPIUpdateData(result)
-  await getPlayerJournal()
 }
 
 const positionUpdateInterval = 30000
 
 const checkIsLoggedIn = async function checkIsLoggedIn () {
-  const result = await fetch(
-    `/fetchPosition?_=${new Date().getTime()}`
-  ).then((resp) => resp.json())
-  if (Boolean(result.error) && result.error) {
-    return
+  if (isWindowActive()) {
+    const result = await fetch(
+      `/fetchPosition?_=${new Date().getTime()}`
+    ).then((resp) => resp.json())
+    if (Boolean(result.error) && result.error) {
+      return
+    }
+    edjdata.player.platform = await getPlatform()
+    _CAPIUpdateData(result)
+
+    await getPlayerJournal()
+
+    positionInterval = setInterval(() => {
+      getUpdatedPosition()
+    }, positionUpdateInterval)
   }
-  edjdata.player.platform = await getPlatform()
-  _CAPIUpdateData(result)
-
-  await getPlayerJournal()
-
-  positionInterval = setInterval(() => {
-    getUpdatedPosition()
-  }, positionUpdateInterval)
 }
 
 checkIsLoggedIn()

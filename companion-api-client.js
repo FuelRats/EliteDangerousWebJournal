@@ -1,10 +1,17 @@
 /* global module */
 'use strict'
 
+const antiHammerInterval = 5000
+const httpOkStatus = 200
+const httpNoContent = 204
+const maxJournalRetries = 10
+const userAgent = 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
+
+let numberOfRetries = 0
+
 class CompanionApiClient {
   constructor (accessToken) {
     this.AccessToken = accessToken
-    this.JournalTries = 0
   }
 
   async fetchProfile () {
@@ -23,15 +30,14 @@ class CompanionApiClient {
   }
 
   async fetchTodaysJournal () {
-    if(this.JournalTries > 10) {
+    if (numberOfRetries > maxJournalRetries) {
       return null
     }
-    
+
     const journal = await this.fetchDataAsText('journal')
     if (!journal.completeResult) {
-      const antiHammerInterval = 5000
       await new Promise((resolve) => setTimeout(resolve, antiHammerInterval))
-      this.JournalTries = this.JournalTries + 1
+      numberOfRetries += 1
       return this.fetchTodaysJournal()
     }
 
@@ -39,18 +45,18 @@ class CompanionApiClient {
   }
 
   async fetchDataAsText (endpoint) {
-    const httpOkStatus = 200
     let completeResult = false
     const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
       headers: {
         Authorization: `Bearer ${this.AccessToken}`,
-        'X-User-Agent': 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
+        'X-User-Agent': userAgent,
       },
     })
       .then((resp) => {
-        if (resp.status === httpOkStatus) {
+        if (resp.status === httpOkStatus || resp.status === httpNoContent) {
           completeResult = true
         }
+
         return resp.text()
       })
       .catch((err) => {
@@ -71,7 +77,7 @@ class CompanionApiClient {
     const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
       headers: {
         Authorization: `Bearer ${this.AccessToken}`,
-        'X-User-Agent': 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
+        'X-User-Agent': userAgent,
       },
     })
       .then((resp) => resp.json())

@@ -140,7 +140,9 @@ app.get('/callback', async (req, res) => {
   req.session.userProfile = userProfile
 
   req.session.save((err) => {
-    console.log(err)
+    if (err) {
+      console.log(err)
+    }
   })
 
   res.redirect('/')
