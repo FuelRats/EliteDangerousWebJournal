@@ -155,12 +155,4 @@ const edj = {
   }
 
 };
-/*
-(async function doneLoading () {
-  document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false)
-  if (typeof process !== 'undefined' && edjApp.is_electron) {
-    const files = await edj.loadLogFiles()
-    edj.monitorChanges(files)
-  }
-})()
-*/
+document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);

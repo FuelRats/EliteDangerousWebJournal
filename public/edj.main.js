@@ -1,9 +1,22 @@
 /* global edjGui */
-'use strict';
+'use strict'; // eslint-disable-next-line no-var
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var windowIsActive = true;
+window.addEventListener('blur', function () {
+  windowIsActive = false;
+});
+window.addEventListener('focus', function () {
+  windowIsActive = true;
+});
+
+function isWindowActive() {
+  const isHidden = document.visibilityState === 'hidden';
+  return isHidden || windowIsActive;
+}
 
 const edjdata = {
   player: {
@@ -58,11 +71,9 @@ const edjdata = {
   oxygenRemaining: null
 };
 let positionInterval = null;
-/*
 document.querySelector('.winpathButton').addEventListener('click', () => {
-  edj.copyFilePath('#winpath')
-})
-*/
+  edj.copyFilePath('#winpath');
+});
 
 const getPlatform = async function getPlatform() {
   const result = await fetch(`/getPlatform?_=${new Date().getTime()}`).then(resp => resp.json());
@@ -87,45 +98,52 @@ const _CAPIUpdateData = function _CAPIUpdateData(result) {
 };
 
 const getPlayerJournal = async function getPlayerJournal() {
-  const result = await fetch(`/fetchJournal?_=${new Date().getTime()}`).then(resp => resp.json());
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchJournal?_=${new Date().getTime()}`).then(resp => resp.json());
 
-  if (Boolean(result.error) && result.error) {
-    return;
+    if (Boolean(result.error) && result.error) {
+      return;
+    }
+
+    edj.fileOnLoad(result.journal.result);
   }
-
-  edj.fileOnLoad(result.journal.result);
 };
 
 const getUpdatedPosition = async function getUpdatedPosition() {
-  const result = await fetch(`/fetchPosition?_=${new Date().getTime()}`).then(resp => resp.json());
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchPosition?_=${new Date().getTime()}`).then(resp => resp.json());
 
-  if (Boolean(result.error) && result.error) {
-    clearInterval(positionInterval);
-    return;
+    if (Boolean(result.error) && result.error) {
+      clearInterval(positionInterval);
+      return;
+    }
+
+    _CAPIUpdateData(result);
+
+    await getPlayerJournal();
+    console.log(new Date());
   }
-
-  _CAPIUpdateData(result);
-
-  await getPlayerJournal();
 };
 
 const positionUpdateInterval = 30000;
 
 const checkIsLoggedIn = async function checkIsLoggedIn() {
-  const result = await fetch(`/fetchPosition?_=${new Date().getTime()}`).then(resp => resp.json());
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchPosition?_=${new Date().getTime()}`).then(resp => resp.json());
 
-  if (Boolean(result.error) && result.error) {
-    return;
+    if (Boolean(result.error) && result.error) {
+      return;
+    }
+
+    edjdata.player.platform = await getPlatform();
+
+    _CAPIUpdateData(result);
+
+    await getPlayerJournal();
+    positionInterval = setInterval(() => {
+      getUpdatedPosition();
+    }, positionUpdateInterval);
   }
-
-  edjdata.player.platform = await getPlatform();
-
-  _CAPIUpdateData(result);
-
-  await getPlayerJournal();
-  positionInterval = setInterval(() => {
-    getUpdatedPosition();
-  }, positionUpdateInterval);
 };
 
 checkIsLoggedIn();

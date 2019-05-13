@@ -17,6 +17,7 @@
   "rules": {
     "no-unassigned-import": {
       "allow": ["isomorphic-fetch"]
-    }
+    },
+    "prefer-arrow-callback": 0
   }
 }

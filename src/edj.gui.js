@@ -89,6 +89,14 @@ const edjGui = {
       )
     }
 
-    document.querySelector('.irc-friendly').innerText = `CMDR ${edjdata.player.cmdr.Commander} [${edjdata.player.platform}] in ${this.getCmdrPosition().join(', ')}, ${strings.join(' ')}`
+    document.querySelector('.irc-friendly').innerText = `CMDR ${
+      edjdata.player.cmdr.Commander
+    } [${
+      edjdata.player.platform
+    }] in ${
+      this.getCmdrPosition().join(', ')
+    }, ${
+      strings.join(' ')
+    }`
   },
 }
