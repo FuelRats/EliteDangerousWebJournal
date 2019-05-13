@@ -44,7 +44,7 @@ class CompanionApiClient {
     const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
       headers: {
         Authorization: `Bearer ${this.AccessToken}`,
-        'User-agent': 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
+        'X-User-Agent': 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
       },
     })
       .then((resp) => {
@@ -71,7 +71,7 @@ class CompanionApiClient {
     const result = await fetch(`https://companion.orerve.net/${endpoint}`, {
       headers: {
         Authorization: `Bearer ${this.AccessToken}`,
-        'User-agent': 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
+        'X-User-Agent': 'Fuel Rats Journal Reader https://journal.fuelrats.com. Contact author at: techrats@fuelrats.com'
       },
     })
       .then((resp) => resp.json())
