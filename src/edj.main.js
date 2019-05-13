@@ -4,14 +4,14 @@
 // eslint-disable-next-line no-var
 var windowIsActive = true
 
-window.addEventListener('blur', function () {
+window.addEventListener('blur', function setWindowAsBlurred () {
   windowIsActive = false
 })
-window.addEventListener('focus', function () {
+window.addEventListener('focus', function setWindowAsFocused () {
   windowIsActive = true
 })
 
-function isWindowActive () {
+const isWindowActive = function isWindowActive () {
   const isHidden = document.visibilityState === 'hidden'
   return isHidden || windowIsActive
 }
