@@ -1,6 +1,6 @@
 {
 	"name": "elite-dangerous-webjournalreader",
-	"version": "1.0.14",
+	"version": "1.0.15",
 	"description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
 	"main": "start.js",
 	"scripts": {
@@ -20,28 +20,28 @@
 	},
 	"homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
 	"devDependencies": {
-		"@babel/cli": "^7.4.3",
-		"@babel/core": "^7.4.3",
-		"@babel/plugin-proposal-object-rest-spread": "^7.4.3",
-		"@babel/preset-env": "^7.4.3",
-		"nodemon": "^1.18.9"
+		"@babel/cli": "^7.5.0",
+		"@babel/core": "^7.5.0",
+		"@babel/plugin-proposal-object-rest-spread": "^7.5.2",
+		"@babel/preset-env": "^7.5.2",
+		"nodemon": "^1.19.1"
 	},
 	"dependencies": {
-		"@fuelrats/eslint-config": "^0.10.2",
-		"babel-eslint": "^10.0.1",
-		"dotenv": "^6.2.0",
-		"ejs": "^2.6.1",
-		"es6-promise": "^4.2.5",
-		"eslint": "^5.14.1",
+		"@fuelrats/eslint-config": "^1.0.1",
+		"babel-eslint": "^10.0.2",
+		"dotenv": "^8.0.0",
+		"ejs": "^2.6.2",
+		"es6-promise": "^4.2.8",
+		"eslint": "^6.0.1",
 		"eslint-plugin-babel": "^5.3.0",
-		"eslint-plugin-import": "^2.16.0",
-		"express": "^4.16.4",
-		"express-session": "^1.15.6",
-		"form-data": "^2.3.3",
-		"graceful-fs": "4.1.10",
+		"eslint-plugin-import": "^2.18.0",
+		"express": "^4.17.1",
+		"express-session": "^1.16.2",
+		"form-data": "^2.5.0",
+		"graceful-fs": "4.2.0",
 		"isomorphic-fetch": "^2.2.1",
-		"memorystore": "^1.6.0",
-		"serve-static": "^1.13.2",
+		"memorystore": "^1.6.1",
+		"serve-static": "^1.14.1",
 		"tail": "^2.0.2"
 	}
 }
