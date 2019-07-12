@@ -49,10 +49,10 @@ const edj = {
       }
 
       let oldDateCheck = new Date();
-      oldDateCheck.setHours(oldDateCheck.getHours() - 12);
+      oldDateCheck.setMinutes(oldDateCheck.getMinutes() - 10);
 
       if(edj.lastFile.lastModifiedDate < oldDateCheck) {
-        alert('This file seems old, you might need to select a new one. (Last modified over 12 hours ago)');
+        alert('This file seems old, you might need to select a new one. (Last modified over 10 minutes ago)');
         return;
       }
 
