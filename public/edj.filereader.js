@@ -1,165 +1,166 @@
 /* globals document, window, FileReader, setTimeout, edjLogparser, edjGui, require */
-"use strict";
+'use strict';
 
 const edj = {
-	profileDir: null,
-	selDir: null,
-	lastFile: null,
-	lastLine: 0,
-	currentTail: null,
+  profileDir: null,
+  selDir: null,
+  lastFile: null,
+  lastLine: 0,
+  currentTail: null,
 
-	checkFiles(evt) {
-		edj.selDir = evt.target.files;
-		edj.monitorChanges(edj.selDir);
-	},
+  checkFiles(evt) {
+    edj.selDir = evt.target.files;
+    edj.monitorChanges(edj.selDir);
+  },
 
-	copyFilePath(selector) {
-		const target = document.querySelector(selector);
-		target.contenteditable = true;
+  copyFilePath(selector) {
+    const target = document.querySelector(selector);
+    target.contenteditable = true;
 
-		if (document.body.createTextRange) {
-			const range = document.body.createTextRange();
-			range.moveToElementText(target);
-			range.select();
-			range.execCommand("Copy");
-			range.moveToElementText(null);
-			range.select();
-		} else if (window.getSelection && document.createRange) {
-			const r2 = document.createRange();
-			r2.selectNodeContents(target);
-			const sel = window.getSelection();
-			sel.removeAllRanges();
-			sel.addRange(r2);
-			document.execCommand("copy");
-		}
+    if (document.body.createTextRange) {
+      const range = document.body.createTextRange();
+      range.moveToElementText(target);
+      range.select();
+      range.execCommand('Copy');
+      range.moveToElementText(null);
+      range.select();
+    } else if (window.getSelection && document.createRange) {
+      const r2 = document.createRange();
+      r2.selectNodeContents(target);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r2);
+      document.execCommand('copy');
+    }
 
-		target.contenteditable = false;
-	},
+    target.contenteditable = false;
+  },
 
-	monitorChanges(_selDir) {
-		if (_selDir === null) {
-			return;
-		}
+  monitorChanges(_selDir) {
+    if (_selDir === null) {
+      return;
+    }
 
-		if (_selDir.toString() === "[object FileList]") {
-			const _files = _selDir;
-			const _fileCount = _files.length;
-			let ix = 0;
+    if (_selDir.toString() === '[object FileList]') {
+      const _files = _selDir;
+      const _fileCount = _files.length;
+      let ix = 0;
 
-			while (ix < _fileCount) {
-				if (_files[ix].name.match(/Journal\.\d+\.\d+\.log/giu)) {
-					if (
-						edj.lastFile === null ||
-						_files[ix].lastModified > edj.lastFile.lastModified
-					) {
-						edj.lastFile = _files[ix];
-					}
-				}
+      while (ix < _fileCount) {
+        if (_files[ix].name.match(/Journal\.\d+\.\d+\.log/gui)) {
+          if (edj.lastFile === null || _files[ix].lastModified > edj.lastFile.lastModified) {
+            edj.lastFile = _files[ix];
+          }
+        }
 
-				ix += 1;
-			}
+        ix += 1;
+      }
 
-			const fr = new FileReader();
+      let oldDateCheck = new Date();
+      oldDateCheck.setHours(oldDateCheck.getHours() - 12);
 
-			fr.onload = res => {
-				edj.fileOnLoad(res.target.result);
-			};
+      if (edj.lastFile.lastModifiedDate < oldDateCheck) {
+        alert('This file seems old, you might need to select a new one. (Last modified over 12 hours ago)');
+        return;
+      }
 
-			fr.readAsText(edj.lastFile, "UTF-8");
-			setTimeout(() => {
-				edj.monitorChanges(_selDir);
-			}, 1000);
-		} else {
-			const _files = _selDir;
-			const _fileCount = _files.length;
-			let ix = 0;
+      const fr = new FileReader();
 
-			while (ix < _fileCount) {
-				if (_files[ix].match(/Journal\.\d+\.\d+\.log/giu)) {
-					if (edj.lastFile === null || _files[ix] !== edj.lastFile) {
-						edj.lastFile = _files[ix];
-					}
-				}
+      fr.onload = res => {
+        edj.fileOnLoad(res.target.result);
+      };
 
-				ix += 1;
-			}
+      fr.readAsText(edj.lastFile, 'UTF-8');
+      setTimeout(() => {
+        edj.monitorChanges(_selDir);
+      }, 1000);
+    } else {
+      const _files = _selDir;
+      const _fileCount = _files.length;
+      let ix = 0;
 
-			const fs = require("fs");
+      while (ix < _fileCount) {
+        if (_files[ix].match(/Journal\.\d+\.\d+\.log/gui)) {
+          if (edj.lastFile === null || _files[ix] !== edj.lastFile) {
+            edj.lastFile = _files[ix];
+          }
+        }
 
-			fs.readFile(
-				`${edj.profileDir}${edj.lastFile}`,
-				{
-					encoding: "UTF-8"
-				},
-				(err, str) => {
-					if (err !== null) {
-						console.log(err);
-					}
+        ix += 1;
+      }
 
-					if (typeof str !== "undefined") {
-						edj.fileOnLoad(str);
-					}
-				}
-			);
-			setTimeout(async () => {
-				const tailFiles = await edj.loadLogFiles();
-				edj.monitorChanges(tailFiles);
-			}, 1000);
-		}
-	},
+      const fs = require('fs');
 
-	fileOnLoad(fileContent) {
-		edjdata.hasJournalEntries = true;
-		const lines = fileContent.split("\n");
-		let lineNumber = edj.lastLine;
+      fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
+        encoding: 'UTF-8'
+      }, (err, str) => {
+        if (err !== null) {
+          console.log(err);
+        }
 
-		while (lineNumber < lines.length) {
-			if (edj.lastLine !== lines[lineNumber]) {
-				edjLogparser.parseLogLine(lines[lineNumber]);
-			}
+        if (typeof str !== 'undefined') {
+          edj.fileOnLoad(str);
+        }
+      });
+      setTimeout(async () => {
+        const tailFiles = await edj.loadLogFiles();
+        edj.monitorChanges(tailFiles);
+      }, 1000);
+    }
+  },
 
-			lineNumber += 1;
-		}
+  fileOnLoad(fileContent) {
+    const lines = fileContent.split('\n');
+    let lineNumber = edj.lastLine;
 
-		edj.lastLine = lineNumber;
-		edjGui.updateGui();
-	},
+    while (lineNumber < lines.length) {
+      if (edj.lastLine !== lines[lineNumber]) {
+        edjLogparser.parseLogLine(lines[lineNumber]);
+      }
 
-	isJson(line) {
-		try {
-			JSON.parse(line);
-		} catch (ex) {
-			return false;
-		}
+      lineNumber += 1;
+    }
 
-		return true;
-	},
+    edj.lastLine = lineNumber;
+    edjGui.updateGui();
+  },
 
-	loadLogFiles() {
-		return edj.selDir;
-	},
+  isJson(line) {
+    try {
+      JSON.parse(line);
+    } catch (ex) {
+      return false;
+    }
 
-	tailLogFile(fileName) {
-		if (fileName === "null") {
-			return;
-		}
+    return true;
+  },
 
-		if (fileName === edj.currentTail) {
-			return;
-		}
+  loadLogFiles() {
+    return edj.selDir;
+  },
 
-		const { Tail } = require("tail");
+  tailLogFile(fileName) {
+    if (fileName === 'null') {
+      return;
+    }
 
-		const logTail = new Tail(fileName);
-		logTail.on("line", line => {
-			edjLogparser.parseLogLine(line);
-		});
-		logTail.on("error", error => {
-			console.error(error);
-		});
-		edj.currentTail = fileName;
-	}
+    if (fileName === edj.currentTail) {
+      return;
+    }
+
+    const {
+      Tail
+    } = require('tail');
+
+    const logTail = new Tail(fileName);
+    logTail.on('line', line => {
+      edjLogparser.parseLogLine(line);
+    });
+    logTail.on('error', error => {
+      console.error(error);
+    });
+    edj.currentTail = fileName;
+  }
+
 };
-document
-	.getElementById("logDirectory")
-	.addEventListener("change", edj.checkFiles, false);
+document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);

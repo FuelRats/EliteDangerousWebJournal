@@ -1,196 +1,151 @@
 /* global edjGui */
-"use strict"; // eslint-disable-next-line no-var
+'use strict'; // eslint-disable-next-line no-var
 
-function _objectSpread(target) {
-	for (let i = 1; i < arguments.length; i++) {
-		var source = arguments[i] != null ? arguments[i] : {};
-		let ownKeys = Object.keys(source);
-		if (typeof Object.getOwnPropertySymbols === "function") {
-			ownKeys = ownKeys.concat(
-				Object.getOwnPropertySymbols(source).filter(function(sym) {
-					return Object.getOwnPropertyDescriptor(
-						source,
-						sym
-					).enumerable;
-				})
-			);
-		}
-		ownKeys.forEach(function(key) {
-			_defineProperty(target, key, source[key]);
-		});
-	}
-	return target;
-}
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { keys.push.apply(keys, Object.getOwnPropertySymbols(object)); } if (enumerableOnly) keys = keys.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); return keys; }
 
-function _defineProperty(obj, key, value) {
-	if (key in obj) {
-		Object.defineProperty(obj, key, {
-			value,
-			enumerable: true,
-			configurable: true,
-			writable: true
-		});
-	} else {
-		obj[key] = value;
-	}
-	return obj;
-}
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
-let windowIsActive = true;
-window.addEventListener("blur", function() {
-	windowIsActive = false;
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var windowIsActive = true;
+window.addEventListener('blur', function setWindowAsBlurred() {
+  windowIsActive = false;
 });
-window.addEventListener("focus", function() {
-	windowIsActive = true;
+window.addEventListener('focus', function setWindowAsFocused() {
+  windowIsActive = true;
 });
 
-function isWindowActive() {
-	const isHidden = document.visibilityState === "hidden";
-	return isHidden || windowIsActive;
-}
+const isWindowActive = function isWindowActive() {
+  const isHidden = document.visibilityState === 'hidden';
+  return isHidden || windowIsActive;
+};
 
 const edjdata = {
-	player: {
-		cmdr: null,
-		rank: {
-			cqc: {
-				rank: 0,
-				progress: 0
-			},
-			combat: {
-				rank: 0,
-				progress: 0
-			},
-			empire: {
-				rank: 0,
-				progress: 0
-			},
-			explore: {
-				rank: 0,
-				progress: 0
-			},
-			federation: {
-				rank: 0,
-				progress: 0
-			},
-			trade: {
-				rank: 0,
-				progress: 0
-			}
-		},
-		pos: {
-			StarSystem: null,
-			Docked: true,
-			Body: null,
-			BodyType: null,
-			StarPos: null,
-			Scoopable: null,
-			Supercruise: null
-		},
-		fuel: {
-			current: null,
-			max: null
-		},
-		materials: {
-			Raw: [],
-			Manufactured: []
-		}
-	},
-	gamemode: null,
-	cansynthesizelifesupport: false,
-	canopyBreached: null,
-	oxygenRemaining: null,
-	hasJournalEntries: false
+  player: {
+    cmdr: null,
+    rank: {
+      cqc: {
+        rank: 0,
+        progress: 0
+      },
+      combat: {
+        rank: 0,
+        progress: 0
+      },
+      empire: {
+        rank: 0,
+        progress: 0
+      },
+      explore: {
+        rank: 0,
+        progress: 0
+      },
+      federation: {
+        rank: 0,
+        progress: 0
+      },
+      trade: {
+        rank: 0,
+        progress: 0
+      }
+    },
+    pos: {
+      StarSystem: null,
+      Docked: true,
+      Body: null,
+      BodyType: null,
+      StarPos: null,
+      Scoopable: null,
+      Supercruise: null
+    },
+    fuel: {
+      current: null,
+      max: null
+    },
+    materials: {
+      Raw: [],
+      Manufactured: []
+    }
+  },
+  gamemode: null,
+  cansynthesizelifesupport: false,
+  canopyBreached: null,
+  oxygenRemaining: null
 };
 let positionInterval = null;
-document.querySelector(".winpathButton").addEventListener("click", () => {
-	edj.copyFilePath("#winpath");
+document.querySelector('.winpathButton').addEventListener('click', () => {
+  edj.copyFilePath('#winpath');
 });
 
 const getPlatform = async function getPlatform() {
-	const result = await fetch(`/getPlatform?_=${new Date().getTime()}`).then(
-		resp => resp.json()
-	);
-	return result;
+  const result = await fetch(`/getPlatform?_=${new Date().getTime()}`).then(resp => resp.json());
+  return result;
 };
 
 const _CAPIUpdateData = function _CAPIUpdateData(result) {
-	if (edjdata.player.cmdr === null) {
-		edjdata.player.cmdr = _objectSpread(
-			{
-				Commander: result.commander.name
-			},
-			result.commander
-		);
-	} // We don't see cargo, so we can't make that prediction.
-	// edjdata.cansynthesizelifesupport = null
+  if (edjdata.player.cmdr === null) {
+    edjdata.player.cmdr = _objectSpread({
+      Commander: result.commander.name
+    }, result.commander);
+  } // We don't see cargo, so we can't make that prediction.
+  // edjdata.cansynthesizelifesupport = null
 
-	edjdata.player.pos.StarSystem = result.lastSystem.name; // Ignoring this for now, since it gives false positives if you travel in the same system after undocking
-	// edjdata.player.pos.Body = result.lastStarport.name
 
-	edjdata.canopyBreached = result.ship.cockpitBreached;
-	edjdata.oxygenRemaining = result.ship.oxygenRemaining;
-	edjGui.updateGui();
+  edjdata.player.pos.StarSystem = result.lastSystem.name; // Ignoring this for now, since it gives false positives if you travel in the same system after undocking
+  // edjdata.player.pos.Body = result.lastStarport.name
+
+  edjdata.canopyBreached = result.ship.cockpitBreached;
+  edjdata.oxygenRemaining = result.ship.oxygenRemaining;
+  edjGui.updateGui();
 };
 
 const getPlayerJournal = async function getPlayerJournal() {
-	if (isWindowActive()) {
-		const result = await fetch(
-			`/fetchJournal?_=${new Date().getTime()}`
-		).then(resp => resp.json());
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchJournal?_=${new Date().getTime()}`).then(resp => resp.json());
 
-		if (Boolean(result.error) && result.error) {
-			return;
-		}
+    if (Boolean(result.error) && result.error) {
+      return;
+    }
 
-		if (!result.journal.result) {
-			return;
-		}
-
-		edjdata.hasJournalEntries = true;
-
-		edj.fileOnLoad(result.journal.result);
-	}
+    edj.fileOnLoad(result.journal.result);
+  }
 };
 
 const getUpdatedPosition = async function getUpdatedPosition() {
-	if (isWindowActive()) {
-		const result = await fetch(
-			`/fetchPosition?_=${new Date().getTime()}`
-		).then(resp => resp.json());
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchPosition?_=${new Date().getTime()}`).then(resp => resp.json());
 
-		if (Boolean(result.error) && result.error) {
-			clearInterval(positionInterval);
-			return;
-		}
+    if (Boolean(result.error) && result.error) {
+      clearInterval(positionInterval);
+      return;
+    }
 
-		_CAPIUpdateData(result);
+    _CAPIUpdateData(result);
 
-		await getPlayerJournal();
-	}
+    await getPlayerJournal();
+    console.log(new Date());
+  }
 };
 
 const positionUpdateInterval = 30000;
 
 const checkIsLoggedIn = async function checkIsLoggedIn() {
-	if (isWindowActive()) {
-		const result = await fetch(
-			`/fetchPosition?_=${new Date().getTime()}`
-		).then(resp => resp.json());
+  if (isWindowActive()) {
+    const result = await fetch(`/fetchPosition?_=${new Date().getTime()}`).then(resp => resp.json());
 
-		if (Boolean(result.error) && result.error) {
-			return;
-		}
+    if (Boolean(result.error) && result.error) {
+      return;
+    }
 
-		edjdata.player.platform = await getPlatform();
+    edjdata.player.platform = await getPlatform();
 
-		_CAPIUpdateData(result);
+    _CAPIUpdateData(result);
 
-		await getPlayerJournal();
-		positionInterval = setInterval(() => {
-			getUpdatedPosition();
-		}, positionUpdateInterval);
-	}
+    await getPlayerJournal();
+    positionInterval = setInterval(() => {
+      getUpdatedPosition();
+    }, positionUpdateInterval);
+  }
 };
 
 checkIsLoggedIn();

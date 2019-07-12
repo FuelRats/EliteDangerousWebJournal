@@ -47,6 +47,15 @@ const edj = {
         }
         ix += 1
       }
+
+      let oldDateCheck = new Date();
+      oldDateCheck.setHours(oldDateCheck.getHours() - 12);
+
+      if(edj.lastFile.lastModifiedDate < oldDateCheck) {
+        alert('This file seems old, you might need to select a new one. (Last modified over 12 hours ago)');
+        return;
+      }
+
       const fr = new FileReader()
       fr.onload = (res) => {
         edj.fileOnLoad(res.target.result)
