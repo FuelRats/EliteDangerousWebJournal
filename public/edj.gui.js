@@ -66,6 +66,7 @@ const edjGui = {
 
   ircFriendlyText() {
     const strings = [];
+    strings.push(`Fuel level: ~${Math.round(edjdata.player.fuel.current, 2)} ton`);
 
     if (edjdata.cansynthesizelifesupport) {
       strings.push('Synth O²: Yes');

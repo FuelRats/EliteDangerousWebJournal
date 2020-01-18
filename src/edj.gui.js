@@ -2,17 +2,17 @@
 'use strict'
 
 const edjGui = {
-  updateGui () {
+  updateGui() {
     edjGui.writeCmdrPosition()
     edjGui.canSynthesizeLifesupport()
     edjGui.updateFuelLevel()
     edjGui.ircFriendlyText()
   },
-  writeCmdrPosition () {
+  writeCmdrPosition() {
     if (edjdata.player.cmdr !== null) {
       document.getElementById('cmdrname').innerText = `CMDR ${
         edjdata.player.cmdr.Commander
-      }`
+        }`
     }
     const playerPos = edjGui.getCmdrPosition()
     if (playerPos.length > 0) {
@@ -23,7 +23,7 @@ const edjGui = {
       document.getElementById('location').innerText = 'at an unknown position'
     }
   },
-  canSynthesizeLifesupport () {
+  canSynthesizeLifesupport() {
     const strings = []
     strings.push(edjdata.cansynthesizelifesupport
       ? 'You can synthesize at least one full life-support refill'
@@ -37,7 +37,7 @@ const edjGui = {
     if (edjdata.oxygenRemaining !== null) {
       strings.push(
         `Oxygen remaining: ${
-          edjdata.oxygenRemaining / 1000
+        edjdata.oxygenRemaining / 1000
         } seconds`
       )
     }
@@ -46,7 +46,7 @@ const edjGui = {
       '<br />'
     )
   },
-  updateFuelLevel () {
+  updateFuelLevel() {
     let fuelWidth = (edjdata.player.fuel.current / edjdata.player.fuel.max) * 100
     if (fuelWidth > 100) {
       fuelWidth = 100
@@ -54,7 +54,7 @@ const edjGui = {
 
     document.getElementById('fuelBar').style.width = `${fuelWidth}%`
   },
-  getCmdrPosition () {
+  getCmdrPosition() {
     const items = []
     if (
       edjdata.player.pos.StarSystem !== null
@@ -72,8 +72,11 @@ const edjGui = {
 
     return items
   },
-  ircFriendlyText () {
+  ircFriendlyText() {
     const strings = []
+
+    strings.push(`Fuel level: ~${Math.round(edjdata.player.fuel.current, 2)} ton`)
+
     if (edjdata.cansynthesizelifesupport) {
       strings.push('Synth O²: Yes')
     }
@@ -84,19 +87,19 @@ const edjGui = {
     if (edjdata.oxygenRemaining !== null) {
       strings.push(
         `Oxygen remaining: ${
-          edjdata.oxygenRemaining / 1000
+        edjdata.oxygenRemaining / 1000
         } seconds`
       )
     }
 
     document.querySelector('.irc-friendly').innerText = `CMDR ${
       edjdata.player.cmdr.Commander
-    } [${
+      } [${
       edjdata.player.platform
-    }] in ${
+      }] in ${
       this.getCmdrPosition().join(', ')
-    }, ${
+      }, ${
       strings.join(' ')
-    }`
+      }`
   },
 }
