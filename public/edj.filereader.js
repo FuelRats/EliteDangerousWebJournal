@@ -7,16 +7,13 @@ const edj = {
   lastFile: null,
   lastLine: 0,
   currentTail: null,
-
   checkFiles(evt) {
     edj.selDir = evt.target.files;
     edj.monitorChanges(edj.selDir);
   },
-
   copyFilePath(selector) {
     const target = document.querySelector(selector);
     target.contenteditable = true;
-
     if (document.body.createTextRange) {
       const range = document.body.createTextRange();
       range.moveToElementText(target);
@@ -32,44 +29,34 @@ const edj = {
       sel.addRange(r2);
       document.execCommand('copy');
     }
-
     target.contenteditable = false;
   },
-
   monitorChanges(_selDir) {
     if (_selDir === null) {
       return;
     }
-
     if (_selDir.toString() === '[object FileList]') {
       const _files = _selDir;
       const _fileCount = _files.length;
       let ix = 0;
-
       while (ix < _fileCount) {
         if (_files[ix].name.match(/Journal\.\d+\.\d+\.log/gui)) {
           if (edj.lastFile === null || _files[ix].lastModified > edj.lastFile.lastModified) {
             edj.lastFile = _files[ix];
           }
         }
-
         ix += 1;
       }
-
       let oldDateCheck = new Date();
       oldDateCheck.setMinutes(oldDateCheck.getMinutes() - 10);
-
       if (edj.lastFile.lastModifiedDate < oldDateCheck) {
         alert('This file seems old, you might need to select a new one. (Last modified over 10 minutes ago)');
         return;
       }
-
       const fr = new FileReader();
-
       fr.onload = res => {
         edj.fileOnLoad(res.target.result);
       };
-
       fr.readAsText(edj.lastFile, 'UTF-8');
       setTimeout(() => {
         edj.monitorChanges(_selDir);
@@ -78,26 +65,21 @@ const edj = {
       const _files = _selDir;
       const _fileCount = _files.length;
       let ix = 0;
-
       while (ix < _fileCount) {
         if (_files[ix].match(/Journal\.\d+\.\d+\.log/gui)) {
           if (edj.lastFile === null || _files[ix] !== edj.lastFile) {
             edj.lastFile = _files[ix];
           }
         }
-
         ix += 1;
       }
-
       const fs = require('fs');
-
       fs.readFile(`${edj.profileDir}${edj.lastFile}`, {
         encoding: 'UTF-8'
       }, (err, str) => {
         if (err !== null) {
           console.log(err);
         }
-
         if (typeof str !== 'undefined') {
           edj.fileOnLoad(str);
         }
@@ -108,50 +90,39 @@ const edj = {
       }, 1000);
     }
   },
-
   fileOnLoad(fileContent) {
     const lines = fileContent.split('\n');
     let lineNumber = edj.lastLine;
-
     while (lineNumber < lines.length) {
       if (edj.lastLine !== lines[lineNumber]) {
         edjLogparser.parseLogLine(lines[lineNumber]);
       }
-
       lineNumber += 1;
     }
-
     edj.lastLine = lineNumber;
     edjGui.updateGui();
   },
-
   isJson(line) {
     try {
       JSON.parse(line);
     } catch (ex) {
       return false;
     }
-
     return true;
   },
-
   loadLogFiles() {
     return edj.selDir;
   },
-
   tailLogFile(fileName) {
     if (fileName === 'null') {
       return;
     }
-
     if (fileName === edj.currentTail) {
       return;
     }
-
     const {
       Tail
     } = require('tail');
-
     const logTail = new Tail(fileName);
     logTail.on('line', line => {
       edjLogparser.parseLogLine(line);
@@ -161,6 +132,5 @@ const edj = {
     });
     edj.currentTail = fileName;
   }
-
 };
 document.getElementById('logDirectory').addEventListener('change', edj.checkFiles, false);

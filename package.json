@@ -1,47 +1,47 @@
 {
-	"name": "elite-dangerous-webjournalreader",
-	"version": "1.0.16",
-	"description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
-	"main": "start.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"express": "node express.js",
-		"express-dev": "nodemon express.js",
-		"build": "./node_modules/.bin/babel src -d public"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/FuelRats/EliteDangerousWebJournal.git"
-	},
-	"author": "Chris Gårdenberg",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/FuelRats/EliteDangerousWebJournal/issues"
-	},
-	"homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
-	"devDependencies": {
-		"@babel/cli": "^7.5.0",
-		"@babel/core": "^7.5.0",
-		"@babel/plugin-proposal-object-rest-spread": "^7.5.2",
-		"@babel/preset-env": "^7.5.2",
-		"nodemon": "^1.19.1"
-	},
-	"dependencies": {
-		"@fuelrats/eslint-config": "^1.0.1",
-		"babel-eslint": "^10.0.2",
-		"dotenv": "^8.0.0",
-		"ejs": "^2.6.2",
-		"es6-promise": "^4.2.8",
-		"eslint": "^6.0.1",
-		"eslint-plugin-babel": "^5.3.0",
-		"eslint-plugin-import": "^2.18.0",
-		"express": "^4.17.1",
-		"express-session": "^1.16.2",
-		"form-data": "^2.5.0",
-		"graceful-fs": "4.2.0",
-		"isomorphic-fetch": "^2.2.1",
-		"memorystore": "^1.6.1",
-		"serve-static": "^1.14.1",
-		"tail": "^2.0.2"
-	}
+  "name": "elite-dangerous-webjournalreader",
+  "version": "1.0.16",
+  "description": "I kinda wanted to see if I could make something in javascript to read the journal files in Elite Dangerous, and I could.",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "express": "node express.js",
+    "express-dev": "nodemon express.js",
+    "build": "./node_modules/.bin/babel src -d public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FuelRats/EliteDangerousWebJournal.git"
+  },
+  "author": "Chris Gårdenberg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FuelRats/EliteDangerousWebJournal/issues"
+  },
+  "homepage": "https://github.com/FuelRats/EliteDangerousWebJournal",
+  "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.7",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/preset-env": "^7.20.2",
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "@fuelrats/eslint-config": "^2.3.0",
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "es6-promise": "^4.2.8",
+    "eslint": "^8.31.0",
+    "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-import": "^2.26.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "form-data": "^4.0.0",
+    "graceful-fs": "^4.2.10",
+    "isomorphic-fetch": "^3.0.0",
+    "memorystore": "^1.6.7",
+    "serve-static": "^1.15.0",
+    "tail": "^2.2.5"
+  }
 }
