@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8700:8700"
+    environment:
+      - FRONTIER_CLIENT_ID=${FRONTIER_CLIENT_ID}
+      - FRONTIER_CLIENT_SECRET=${FRONTIER_CLIENT_SECRET}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - COOKIE_SIGN_KEY=${COOKIE_SIGN_KEY}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:8700', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
